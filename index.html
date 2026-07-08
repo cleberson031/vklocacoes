@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -662,13 +662,18 @@
     </section>
 
     <!-- 15. RODAPÉ -->
-    <footer class="bg-[#051427] text-slate-400 py-8 border-t border-white/5">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
-        <div class="flex items-center gap-2">
-          <img src="https://i.ibb.co/XZyY6M7b/Logo.png" alt="V&K Footer" class="h-8 w-auto" />
-          <span class="text-[#FF7A00] text-xs font-sans font-medium block uppercase tracking-wider">Assistência técnica Locação e Loja</span>
+    <footer class="bg-[#051427] text-slate-400 py-16 sm:py-20 border-t border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center gap-8 sm:gap-12 text-xs md:text-sm tracking-wide">
+        <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+          <img src="https://i.ibb.co/XZyY6M7b/Logo.png" alt="V&K Footer" class="h-10 w-auto transition-transform hover:scale-105 duration-300" />
+          <span class="text-[#FF7A00] font-sans font-semibold uppercase tracking-widest text-center sm:text-left leading-relaxed">
+            Assistência técnica Locação e Loja
+          </span>
         </div>
-        <p class="text-center">© 2026 V&K Assistência Técnica e Locação.<br>Todos os direitos reservados. • CNPJ: 54.478.297/0001-24</p>
+        <p class="text-center sm:text-right leading-loose text-slate-400/90 font-light">
+          © 2026 V&K Assistência Técnica e Locação.<br class="hidden sm:block">
+          Todos os direitos reservados. • CNPJ: 54.478.297/0001-24
+        </p>
       </div>
     </footer>
 
@@ -859,6 +864,9 @@
     <div id="print-receipt-section" class="hidden bg-white text-black font-mono p-4 w-full max-w-[58mm] sm:max-w-[80mm] mx-auto">
       <pre id="print-receipt-text" class="whitespace-pre-wrap font-mono text-[11px] leading-relaxed select-text tracking-normal text-left"></pre>
     </div>
+
+    <!-- jsPDF library CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <!-- Vanilla Javascript Logic Core -->
     <script>
@@ -1243,11 +1251,99 @@
           if (printBtn) {
             printBtn.addEventListener("click", (e) => {
               e.preventDefault();
-              const printTextEl = document.getElementById("print-receipt-text");
-              if (printTextEl) {
-                printTextEl.textContent = getFormattedMessage(false);
+              
+              // Validate form fields first
+              if (!assistForm.reportValidity()) {
+                return;
               }
-              window.print();
+
+              const { jsPDF } = window.jspdf;
+              
+              // Get form values
+              const nome = document.getElementById("assist-nome").value || "Não informado";
+              const tel = document.getElementById("assist-tel").value || "Não informado";
+              const equipamento = document.getElementById("assist-equipamento").value || "Não informado";
+              const descricao = assistDescTextarea.value || "Não informado";
+              
+              const now = new Date();
+              const dataAtual = now.toLocaleDateString("pt-BR");
+              const horaAtual = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+              // Dynamic ticket height to fit text properly
+              const estimatedLines = Math.ceil(descricao.length / 32) + Math.ceil(equipamento.length / 32) + Math.ceil(nome.length / 32);
+              const dynamicHeight = 115 + (estimatedLines * 4.5);
+              
+              const doc = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: [80, Math.max(140, dynamicHeight)]
+              });
+
+              // Courier font mimics thermal printer output
+              doc.setFont("courier", "bold");
+              doc.setFontSize(10);
+              
+              let y = 10;
+              doc.text("V&K ASSISTENCIA TECNICA", 40, y, { align: "center" });
+              y += 5;
+              
+              doc.setFont("courier", "normal");
+              doc.setFontSize(7.5);
+              doc.text("Rua Edson Bezerra, 431 - Centro", 40, y, { align: "center" });
+              y += 4;
+              doc.text("Itapora - MS | CEP: 79890-011", 40, y, { align: "center" });
+              y += 4;
+              doc.text("WhatsApp: (67) 99818-7301", 40, y, { align: "center" });
+              y += 5;
+              
+              doc.setFont("courier", "bold");
+              doc.text("========================================", 40, y, { align: "center" });
+              y += 5;
+              doc.text("FICHA DE ORCAMENTO DE TRIAGEM", 40, y, { align: "center" });
+              y += 5;
+              doc.text("========================================", 40, y, { align: "center" });
+              y += 6;
+              
+              doc.setFont("courier", "normal");
+              doc.text(`Data: ${dataAtual}      Hora: ${horaAtual}`, 10, y);
+              y += 6;
+              
+              const addSection = (label, value) => {
+                doc.setFont("courier", "bold");
+                doc.text(`${label}:`, 10, y);
+                y += 4;
+                doc.setFont("courier", "normal");
+                
+                const wrappedLines = doc.splitTextToSize(value, 60);
+                for (let i = 0; i < wrappedLines.length; i++) {
+                  doc.text(wrappedLines[i], 10, y);
+                  y += 4;
+                }
+                y += 2;
+              };
+
+              addSection("CLIENTE", nome);
+              addSection("WHATSAPP", tel);
+              addSection("EQUIPAMENTO", equipamento);
+              addSection("DEFEITO RELATADO", descricao);
+              
+              doc.setFont("courier", "bold");
+              doc.text("========================================", 40, y, { align: "center" });
+              y += 5;
+              
+              doc.setFont("courier", "normal");
+              doc.setFontSize(7);
+              doc.text("Apresente esta ficha ao entregar", 40, y, { align: "center" });
+              y += 3.5;
+              doc.text("o seu equipamento em nossa loja.", 40, y, { align: "center" });
+              y += 5;
+              
+              doc.setFont("courier", "bold");
+              doc.setFontSize(8.5);
+              doc.text("OBRIGADO PELA PREFERENCIA!", 40, y, { align: "center" });
+              
+              const fileNameClean = nome.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 15);
+              doc.save(`Ficha-VK-${fileNameClean}.pdf`);
             });
           }
         }
