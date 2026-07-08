@@ -1,0 +1,370 @@
+﻿/**
+ * V&K Assistência Técnica e Locação
+ * script.js - Lógica Core Otimizada em Vanilla JS
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  let savedScrollPos = 0;
+  let currentSlideIndex = 0;
+  let carouselAutoplayInterval = null;
+  let isCarouselPaused = false;
+
+  const preloader = document.getElementById("preloader");
+  const mainHeader = document.getElementById("main-header");
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenuDrawer = document.getElementById("mobile-menu-drawer");
+  const closeMobileMenuBtn = document.getElementById("close-mobile-menu-btn");
+  const assistModal = document.getElementById("assist-modal");
+  const locacaoModal = document.getElementById("locacao-modal");
+  const cpModal = document.getElementById("cp-modal");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const closeLightboxBtn = document.getElementById("close-lightbox-btn");
+
+  const slides = document.querySelectorAll(".carousel-slide");
+  const indicators = document.querySelectorAll(".carousel-indicator");
+  const prevSlideBtn = document.getElementById("prev-slide-btn");
+  const nextSlideBtn = document.getElementById("next-slide-btn");
+  const carouselContainer = document.getElementById("carousel-container");
+
+  const assistForm = document.getElementById("assist-form");
+  const assistDescTextarea = document.getElementById("assist-descricao");
+
+  // 1. TELA DE ABERTURA (PRELOADER)
+  setTimeout(() => {
+    if (preloader) {
+      preloader.classList.add("opacity-0", "scale-95");
+      preloader.addEventListener("transitionend", () => {
+        preloader.style.display = "none";
+      });
+    }
+  }, 2000);
+
+  // 2. CONTROLE DO CABEÇALHO NA ROLAGEM
+  window.addEventListener("scroll", () => {
+    if (mainHeader) {
+      if (window.scrollY > 50) {
+        mainHeader.classList.add("bg-[#0A2342]", "shadow-xl");
+        mainHeader.classList.remove("bg-[#0A2342]/95");
+      } else {
+        mainHeader.classList.add("bg-[#0A2342]/95");
+        mainHeader.classList.remove("shadow-xl");
+      }
+    }
+  });
+
+  // GAVETA MENU MOBILE
+  if (mobileMenuBtn && mobileMenuDrawer) {
+    mobileMenuBtn.addEventListener("click", () => {
+      mobileMenuDrawer.classList.remove("translate-x-full");
+    });
+  }
+
+  const closeMobileMenu = () => {
+    if (mobileMenuDrawer) {
+      mobileMenuDrawer.classList.add("translate-x-full");
+    }
+  };
+
+  if (closeMobileMenuBtn) {
+    closeMobileMenuBtn.addEventListener("click", closeMobileMenu);
+  }
+
+  document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+    link.addEventListener("click", closeMobileMenu);
+  });
+
+  // 3. FADE IN SCROLL EFFECT
+  const revealElementsOnScroll = () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".fade-in-on-scroll").forEach((el) => observer.observe(el));
+  };
+  revealElementsOnScroll();
+
+  // 4. LÓGICA DO CARROSSEL INFINITO
+  const showSlide = (index) => {
+    if (!slides.length) return;
+    
+    if (index >= slides.length) currentSlideIndex = 0;
+    else if (index < 0) currentSlideIndex = slides.length - 1;
+    else currentSlideIndex = index;
+
+    slides.forEach((slide, i) => {
+      if (i === currentSlideIndex) {
+        slide.classList.remove("opacity-0", "scale-95", "pointer-events-none");
+        slide.classList.add("opacity-100", "scale-100", "z-10");
+      } else {
+        slide.classList.add("opacity-0", "scale-95", "pointer-events-none");
+        slide.classList.remove("opacity-100", "scale-100", "z-10");
+      }
+    });
+
+    indicators.forEach((indicator, i) => {
+      if (i === currentSlideIndex) {
+        indicator.classList.add("w-8", "bg-[#FF7A00]");
+        indicator.classList.remove("w-2.5", "bg-slate-300");
+      } else {
+        indicator.classList.remove("w-8", "bg-[#FF7A00]");
+        indicator.classList.add("w-2.5", "bg-slate-300");
+      }
+    });
+  };
+
+  const startCarouselAutoplay = () => {
+    if (carouselAutoplayInterval) clearInterval(carouselAutoplayInterval);
+    carouselAutoplayInterval = setInterval(() => {
+      if (!isCarouselPaused) {
+        showSlide(currentSlideIndex + 1);
+      }
+    }, 5000);
+  };
+
+  if (slides.length > 0) {
+    showSlide(0);
+    startCarouselAutoplay();
+
+    if (prevSlideBtn) prevSlideBtn.addEventListener("click", () => { showSlide(currentSlideIndex - 1); startCarouselAutoplay(); });
+    if (nextSlideBtn) nextSlideBtn.addEventListener("click", () => { showSlide(currentSlideIndex + 1); startCarouselAutoplay(); });
+
+    indicators.forEach((indicator) => {
+      indicator.addEventListener("click", (e) => {
+        const targetIndex = parseInt(e.target.getAttribute("data-slide"), 10);
+        showSlide(targetIndex);
+        startCarouselAutoplay();
+      });
+    });
+
+    if (carouselContainer) {
+      carouselContainer.addEventListener("mouseenter", () => isCarouselPaused = true);
+      carouselContainer.addEventListener("mouseleave", () => isCarouselPaused = false);
+      carouselContainer.addEventListener("touchstart", () => isCarouselPaused = true);
+      carouselContainer.addEventListener("touchend", () => isCarouselPaused = false);
+    }
+  }
+
+  // 5. GERENCIAMENTO DE MODAIS COM TRAVA DE ROLAGEM
+  const openModal = (modalElement) => {
+    savedScrollPos = window.scrollY;
+    if (modalElement) {
+      modalElement.classList.remove("hidden");
+      modalElement.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+  };
+
+  const closeModal = (modalElement) => {
+    if (modalElement) {
+      modalElement.classList.add("hidden");
+      modalElement.classList.remove("flex");
+      document.body.style.overflow = "";
+
+      setTimeout(() => {
+        window.scrollTo({ top: savedScrollPos, behavior: "auto" });
+      }, 50);
+    }
+  };
+
+  document.querySelectorAll(".open-assist-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => { e.preventDefault(); openModal(assistModal); });
+  });
+
+  document.querySelectorAll(".open-locacao-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => { e.preventDefault(); openModal(locacaoModal); });
+  });
+
+  document.querySelectorAll(".open-cp-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => { e.preventDefault(); openModal(cpModal); });
+  });
+
+  document.querySelectorAll(".close-modal-btn").forEach((btn) => {
+    btn.addEventListener("click", () => { closeModal(assistModal); closeModal(locacaoModal); closeModal(cpModal); });
+  });
+
+  [assistModal, locacaoModal, cpModal].forEach((modal) => {
+    if (modal) {
+      modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(modal); });
+    }
+  });
+
+  // 6. VISUALIZADOR DE IMAGENS (LIGHTBOX)
+  const openLightbox = (src) => {
+    if (lightbox && lightboxImg) {
+      lightboxImg.src = src;
+      lightbox.classList.remove("hidden");
+      lightbox.classList.add("flex");
+    }
+  };
+
+  const closeLightbox = () => {
+    if (lightbox) {
+      lightbox.classList.add("hidden");
+      lightbox.classList.remove("flex");
+    }
+  };
+
+  document.querySelectorAll(".lightbox-trigger").forEach((element) => {
+    element.addEventListener("click", () => {
+      const img = element.querySelector("img") || element;
+      if (img && img.src) openLightbox(img.src);
+    });
+  });
+
+  if (closeLightboxBtn) closeLightboxBtn.addEventListener("click", closeLightbox);
+  if (lightbox) {
+    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+  }
+
+  // Auto expander de campo de texto de descrição
+  if (assistDescTextarea) {
+    assistDescTextarea.addEventListener("input", () => {
+      assistDescTextarea.style.height = "auto";
+      assistDescTextarea.style.height = `${assistDescTextarea.scrollHeight}px`;
+    });
+  }
+
+  // 7. COMPILADOR DE ORÇAMENTO INTELIGENTE E FORMATO RECIBO (CUPOM FISCAL TÉRMICO)
+  if (assistForm) {
+    const getFormattedMessage = (isWhatsapp = true) => {
+      const nome = document.getElementById("assist-nome").value || "Não informado";
+      const telefone = document.getElementById("assist-tel").value || "Não informado";
+      const equipamento = document.getElementById("assist-equipamento").value || "Não informado";
+      const descricao = assistDescTextarea.value || "Não informado";
+
+      const now = new Date();
+      const dataAtual = now.toLocaleDateString("pt-BR");
+      const horaAtual = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+      const formatListItem = (label, value, boldWrapper = "") => {
+        const prefix = `• ${boldWrapper}${label}:${boldWrapper} `;
+        const limit = 42;
+        if ((prefix + value).length <= limit) return prefix + value;
+
+        const words = value.split(" ");
+        let line1 = prefix;
+        let currentLine = "";
+        let i = 0;
+        
+        while (i < words.length && (line1 + currentLine + (currentLine ? " " : "") + words[i]).length <= limit) {
+          currentLine += (currentLine ? " " : "") + words[i];
+          i++;
+        }
+        line1 += currentLine;
+        
+        const lines = [line1];
+        currentLine = "";
+        const indent = "  ";
+        
+        while (i < words.length) {
+          const word = words[i];
+          if ((indent + currentLine + (currentLine ? " " : "") + word).length <= limit) {
+            currentLine += (currentLine ? " " : "") + word;
+          } else {
+            lines.push(indent + (currentLine || word));
+            currentLine = currentLine ? word : "";
+          }
+          i++;
+        }
+        if (currentLine) lines.push(indent + currentLine);
+        return lines.join("\n");
+      };
+
+      const bold = isWhatsapp ? "*" : "";
+      const italic = isWhatsapp ? "_" : "";
+      const lineLength = 42;
+      const divider = "-".repeat(lineLength);
+
+      const header = `${bold}V&K ASSISTÊNCIA TÉCNICA${bold}`;
+      const dateLine = `${bold}Data de Envio:${bold} ${dataAtual}`;
+      const timeLine = `${bold}Hora de Envio:${bold} ${horaAtual}`;
+      const dadosTitle = `${bold}DADOS DO ORÇAMENTO:${bold}`;
+
+      const formattedCliente = formatListItem("Cliente", nome, bold);
+      const formattedWhatsApp = formatListItem("WhatsApp", telefone, bold);
+      const formattedEquip = formatListItem("Equipamento", equipamento, bold);
+      const formattedDefeito = formatListItem("Defeito Relatado", descricao, bold);
+
+      const footerText = "Nova triagem recebida via Quadro de Orçamento Inteligente.";
+      const wrappedFooter = [];
+      let currentLine = "";
+      for (const word of footerText.split(" ")) {
+        if ((currentLine + (currentLine ? " " : "") + word).length <= lineLength) {
+          currentLine += (currentLine ? " " : "") + word;
+        } else {
+          wrappedFooter.push(currentLine);
+          currentLine = word;
+        }
+      }
+      if (currentLine) wrappedFooter.push(currentLine);
+      const footer = italic + wrappedFooter.join("\n" + italic) + italic;
+
+      return [
+        header,
+        divider,
+        dateLine,
+        timeLine,
+        divider,
+        dadosTitle,
+        "",
+        formattedCliente,
+        formattedWhatsApp,
+        formattedEquip,
+        formattedDefeito,
+        divider,
+        footer
+      ].join("\n");
+    };
+
+    assistForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const messageText = getFormattedMessage(true);
+      const whatsappUrl = `https://wa.me/5567998187301?text=${encodeURIComponent(messageText)}`;
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    });
+
+    const printBtn = document.getElementById("assist-print-btn");
+    if (printBtn) {
+      printBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const printTextEl = document.getElementById("print-receipt-text");
+        if (printTextEl) {
+          printTextEl.textContent = getFormattedMessage(false);
+        }
+        window.print();
+      });
+    }
+  }
+
+  // 8. LOGO CLICK TO SMOOTH SCROLL TOP
+  const headerLogoLink = document.getElementById("header-logo");
+  if (headerLogoLink) {
+    headerLogoLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  // 9. BOTÃO DE VOLTAR AO TOPO
+  const backToTopBtn = document.getElementById("back-to-top");
+  if (backToTopBtn) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.remove("opacity-0", "pointer-events-none");
+        backToTopBtn.classList.add("opacity-100");
+      } else {
+        backToTopBtn.classList.add("opacity-0", "pointer-events-none");
+        backToTopBtn.classList.remove("opacity-100");
+      }
+    });
+
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+});

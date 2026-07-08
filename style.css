@@ -1,0 +1,126 @@
+﻿@import "tailwindcss";
+
+@theme {
+  --color-brand-navy: #0A2342;
+  --color-brand-blue: #1E4E8C;
+  --color-brand-orange: #FF7A00;
+  --color-brand-light: #F5F5F5;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Scroll customizado para navegadores baseados no Webkit */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A2342;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #FF7A00;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e06c00;
+  }
+}
+
+/* Animações e efeitos especiais */
+@keyframes preloader-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.95; }
+}
+
+.animate-preloader-pulse {
+  animation: preloader-pulse 2s infinite ease-in-out;
+}
+
+@keyframes loading-progress {
+  0% { left: -50%; }
+  100% { left: 100%; }
+}
+
+.animate-loading-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: #FF7A00;
+  border-radius: 9999px;
+  animation: loading-progress 1.5s infinite ease-in-out;
+}
+
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (min-width: 1024px) {
+  .desktop-contain-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .desktop-contain-card img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+  }
+}
+
+/* Transições elegantes de exibição gradual na rolagem */
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-modal {
+  animation: modal-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes whatsapp-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.08); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.animate-whatsapp-pulse {
+  animation: whatsapp-pulse 2s infinite ease-in-out;
+}
+
+/* Estilos de impressão Cupom Térmico de Triagem */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  body > *:not(#print-receipt-section) {
+    display: none !important;
+  }
+  #print-receipt-section {
+    display: block !important;
+  }
+}
