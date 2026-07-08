@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,11 +10,172 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="estilo.css" />
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Tailwind v4 Custom Theme Configurations -->
+    <style type="text/tailwindcss">
+      @theme {
+        --color-brand-navy: #0A2342;
+        --color-brand-blue: #1E4E8C;
+        --color-brand-orange: #FF7A00;
+        --color-brand-light: #F5F5F5;
+        
+        --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+        --font-display: "Space Grotesk", sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+      }
+    </style>
+
+    <!-- Core Custom Animations and Layout Tweaks -->
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0A2342;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #FF7A00;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #e06c00;
+      }
+
+      /* Preloader pulsing */
+      @keyframes preloader-pulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 0.95;
+        }
+      }
+
+      .animate-preloader-pulse {
+        animation: preloader-pulse 2s infinite ease-in-out;
+      }
+
+      /* Preloader progress bar */
+      @keyframes loading-progress {
+        0% { left: -50%; }
+        100% { left: 100%; }
+      }
+
+      .animate-loading-bar {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        background-color: #FF7A00;
+        border-radius: 9999px;
+        animation: loading-progress 1.5s infinite ease-in-out;
+      }
+
+      /* Parallax Background */
+      .parallax-bg {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      /* Grid card containment for proper rendering */
+      @media (min-width: 1024px) {
+        .desktop-contain-card {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        .desktop-contain-card img {
+          width: auto !important;
+          height: auto !important;
+          max-width: 100% !important;
+          max-height: 100% !important;
+          object-fit: contain !important;
+        }
+      }
+
+      /* Fade-in scroll animations */
+      .fade-in-on-scroll {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+
+      .fade-in-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Modal and Backdrop Animations */
+      @keyframes modal-fade-in {
+        from {
+          opacity: 0;
+          transform: scale(0.95) translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      .animate-modal {
+        animation: modal-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* WhatsApp Pulse Alert */
+      @keyframes whatsapp-pulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+        70% {
+          transform: scale(1.08);
+          box-shadow: 0 0 0 15px rgba(16, 185, 129, 0);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        }
+      }
+
+      .animate-whatsapp-pulse {
+        animation: whatsapp-pulse 2s infinite ease-in-out;
+      }
+
+      /* Print only layout tweaks for thermal receipt */
+      @media print {
+        body {
+          background: white !important;
+          color: black !important;
+        }
+        
+        body > *:not(#print-receipt-section) {
+          display: none !important;
+        }
+        
+        #print-receipt-section {
+          display: block !important;
+        }
+      }
+    </style>
   </head>
   <body class="bg-[#F5F5F5] text-slate-900 font-sans selection:bg-[#FF7A00] selection:text-white antialiased overflow-x-hidden">
 
-    <!-- PRELOADER -->
+    <!-- 1. TELA DE ABERTURA (PRELOADER) -->
     <div id="preloader" class="fixed inset-0 bg-[#0A2342] z-[9999] flex flex-col items-center justify-center text-center px-4 transition-all duration-500 ease-out">
       <div class="flex flex-col items-center max-w-sm">
         <img src="https://i.ibb.co/XZyY6M7b/Logo.png" alt="V&K Logo" class="w-32 h-32 object-contain animate-preloader-pulse drop-shadow-[0_10px_15px_rgba(255,122,0,0.3)]" />
@@ -26,14 +187,14 @@
       </div>
     </div>
 
-    <!-- CABEÇALHO (HEADER) -->
+    <!-- 2. CABEÇALHO FIXO -->
     <header id="main-header" class="fixed top-0 left-0 right-0 h-20 bg-[#0A2342]/95 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-4 sm:px-6 lg:px-12 transition-all duration-300">
       <a href="#top" id="header-logo" class="flex items-center gap-2 group">
         <img src="https://i.ibb.co/XZyY6M7b/Logo.png" alt="V&K Logo" class="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
         <span class="text-white font-display font-bold text-lg tracking-tight">V&K <span class="text-[#FF7A00] text-xs font-sans font-medium block uppercase tracking-wider">Serviços</span></span>
       </a>
 
-      <!-- Menu Desktop -->
+      <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center gap-8">
         <a href="#loja" class="text-white hover:text-[#FF7A00] font-medium text-xs uppercase tracking-wider transition-colors">Loja</a>
         <a href="#" class="open-assist-btn text-white hover:text-[#FF7A00] font-medium text-xs uppercase tracking-wider transition-colors">Assistência Técnica</a>
@@ -41,99 +202,134 @@
         <a href="#" class="open-cp-btn text-white hover:text-[#FF7A00] font-medium text-xs uppercase tracking-wider transition-colors">C&P Construções</a>
       </nav>
 
-      <!-- Redes e Ações (Sem ícone do YouTube/TikTok e com links corretos) -->
+      <!-- CTA & Socials -->
       <div class="hidden lg:flex items-center gap-6">
         <div class="flex items-center gap-4 text-white/80 text-sm">
           <a href="https://www.instagram.com/vk_assistencia_tecnica_locacao/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="hover:text-[#FF7A00] transition-colors" title="Instagram">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/></svg>
+            <i class="fab fa-instagram text-lg"></i>
           </a>
-          <a href="https://v-k-assist-ncia-t-cnica-e-loc-o-1041760851522.us-west2.run.app/#" target="_blank" rel="noopener noreferrer" class="hover:text-[#FF7A00] transition-colors" title="Facebook">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-[#FF7A00] transition-colors" title="Facebook">
+            <i class="fab fa-facebook text-lg"></i>
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-[#FF7A00] transition-colors" title="YouTube">
+            <i class="fab fa-youtube text-lg"></i>
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-[#FF7A00] transition-colors" title="TikTok">
+            <i class="fab fa-tiktok text-lg"></i>
           </a>
         </div>
+
         <a href="https://wa.me/5567998187301" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg text-xs tracking-wider uppercase transition-all flex items-center gap-1.5 shadow-md">
-          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 2c-5.516 0-10 4.478-10 10 0 1.772.463 3.432 1.272 4.881l-1.303 4.757 4.886-1.28c1.401.762 2.992 1.196 4.68 1.196 5.516 0 10-4.478 10-10s-4.484-10-10-10zm.115 16.541c-1.565 0-3.085-.421-4.417-1.218l-.317-.189-2.909.762.777-2.836-.208-.33c-.875-1.391-1.336-3.006-1.336-4.679 0-4.646 3.791-8.431 8.441-8.431s8.439 3.785 8.439 8.431-3.79 8.49-8.439 8.49z"/></svg>
+          <i class="fab fa-whatsapp text-sm"></i>
           Solicitar Atendimento
         </a>
       </div>
 
-      <!-- Menu Mobile Button -->
-      <div class="flex items-center gap-3 md:hidden">
-        <button id="mobile-menu-btn" class="text-white hover:text-[#FF7A00] p-1" aria-label="Abrir Menu">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      <!-- Mobile triggers -->
+      <div class="flex items-center gap-3.5 md:hidden">
+        <button id="mobile-menu-btn" class="text-white hover:text-[#FF7A00] p-1">
+          <i class="fas fa-bars text-xl"></i>
         </button>
       </div>
     </header>
 
-    <!-- MOBILE MENU DRAWER -->
+    <!-- Mobile Drawer Menu -->
     <div id="mobile-menu-drawer" class="fixed inset-y-0 right-0 w-72 bg-[#0A2342] z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col justify-between p-6">
       <div>
         <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
           <span class="text-white font-display font-bold text-lg">Menu V&K</span>
-          <button id="close-mobile-menu-btn" class="text-white hover:text-[#FF7A00] p-1" aria-label="Fechar Menu">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+          <button id="close-mobile-menu-btn" class="text-white hover:text-[#FF7A00] p-1">
+            <i class="fas fa-times text-xl"></i>
           </button>
         </div>
         <nav class="flex flex-col gap-4">
-          <a href="#loja" class="mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold py-2 block">Loja</a>
-          <a href="#" class="open-assist-btn mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold py-2 block">Assistência Técnica</a>
-          <a href="#" class="open-locacao-btn mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold py-2 block">Locação</a>
-          <a href="#" class="open-cp-btn mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold py-2 block">C&P Construções</a>
-          <a href="https://g.page/r/CamvG8zIixv9EBM/review" target="_blank" rel="noopener noreferrer" class="mt-4 block text-center bg-[#FF7A00] hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg text-xs uppercase tracking-wider shadow">Avaliar no Google</a>
+          <a href="#loja" class="mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold uppercase tracking-wider py-2 block">Loja</a>
+          <a href="#" class="open-assist-btn mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold uppercase tracking-wider py-2 block">Assistência Técnica</a>
+          <a href="#" class="open-locacao-btn mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold uppercase tracking-wider py-2 block">Locação</a>
+          <a href="#" class="open-cp-btn mobile-nav-link text-white hover:text-[#FF7A00] font-display text-lg font-semibold uppercase tracking-wider py-2 block">C&P Construções</a>
+          <div class="pt-4 border-t border-white/10 mt-2 flex justify-center">
+            <a href="https://g.page/r/CamvG8zIixv9EBM/review" target="_blank" rel="noopener noreferrer" class="inline-block w-full text-center bg-[#FF7A00] hover:bg-orange-600 border border-transparent text-white font-bold py-3 px-6 rounded-lg text-xs uppercase tracking-wider transition-colors shadow">Avaliar no Google</a>
+          </div>
         </nav>
       </div>
+
       <div class="space-y-6">
         <div class="flex justify-center gap-5">
-          <a href="https://www.instagram.com/vk_assistencia_tecnica_locacao/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center shadow-md" title="Instagram">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+          <a href="https://www.instagram.com/vk_assistencia_tecnica_locacao/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-300" title="Instagram">
+            <i class="fab fa-instagram text-xl text-white"></i>
           </a>
-          <a href="https://v-k-assist-ncia-t-cnica-e-loc-o-1041760851522.us-west2.run.app/#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md" title="Facebook">
-            <svg class="w-5 h-5 text-white fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-300" title="Facebook">
+            <i class="fab fa-facebook-f text-xl text-white"></i>
           </a>
         </div>
-        <a href="https://wa.me/5567998187301" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase text-center flex items-center justify-center shadow-md">Falar no WhatsApp</a>
+        <a href="https://wa.me/5567998187301" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs tracking-wider uppercase text-center flex items-center justify-center gap-1.5 shadow-md">
+          <i class="fab fa-whatsapp text-sm mr-1.5"></i>
+          Falar no WhatsApp
+        </a>
       </div>
     </div>
 
-    <!-- HERO SECTION -->
-    <section class="relative min-h-[calc(100vh-80px)] flex items-center justify-center py-20 bg-cover bg-center mt-20" style="background-image: url('https://i.ibb.co/5WB9qLJS/fachadaprincipal.jpg');">
+    <!-- 3. SEÇÃO HERO -->
+    <section class="relative min-h-[calc(100vh-80px)] flex items-center justify-center py-20 bg-cover bg-center mt-20 hero-bg" style="background-image: url('https://i.ibb.co/5WB9qLJS/fachadaprincipal.jpg');">
       <div class="absolute inset-0 bg-black/75 z-0"></div>
-      <div class="relative z-10 w-full max-w-7xl mx-auto px-4 text-center text-white">
+      <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 text-center text-white">
         <div class="flex justify-center gap-4 mb-4">
           <a href="https://www.instagram.com/vk_assistencia_tecnica_locacao/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-300" title="Instagram">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+            <i class="fab fa-instagram text-xl text-white"></i>
           </a>
-          <a href="https://v-k-assist-ncia-t-cnica-e-loc-o-1041760851522.us-west2.run.app/#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-300" title="Facebook">
-            <svg class="w-5 h-5 text-white fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-300" title="Facebook">
+            <i class="fab fa-facebook-f text-xl text-white"></i>
           </a>
         </div>
-        <span class="inline-block bg-[#FF7A00]/20 border border-[#FF7A00]/40 text-[#FF7A00] font-bold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">Líder no Setor</span>
-        <h1 class="text-3xl sm:text-5xl lg:text-7xl font-display font-extrabold tracking-tight max-w-5xl mx-auto leading-tight">V&K Assistência Técnica e Locação</h1>
-        <p class="font-display font-medium text-lg sm:text-xl lg:text-2xl mt-4 tracking-wide text-white/95">Equipamentos Fortes para Obras Inabaláveis.</p>
-        <p class="text-sm sm:text-base text-slate-300 max-w-3xl mx-auto mt-4 leading-relaxed font-light">Locação ágil, venda de ferramentas de alta performance e assistência técnica multimarcas especializada autorizada Menegotti que sua obra precisa para não parar.</p>
+        <span class="inline-block bg-[#FF7A00]/20 border border-[#FF7A00]/40 text-[#FF7A00] font-bold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+          Líder no Setor
+        </span>
+        <h1 class="text-3xl sm:text-5xl lg:text-7xl font-display font-extrabold tracking-tight max-w-5xl mx-auto leading-tight">
+          V&K Assistência Técnica e Locação
+        </h1>
+        <p class="font-display font-medium text-lg sm:text-xl lg:text-2xl mt-4 tracking-wide text-white/95">
+          Equipamentos Fortes para Obras Inabaláveis.
+        </p>
+        <p class="text-sm sm:text-base text-slate-300 max-w-3xl mx-auto mt-4 leading-relaxed font-light">
+          Locação ágil, venda de ferramentas de alta performance e assistência técnica multimarcas especializada que sua obra precisa para não parar. Revendedor Autorizado Menegotti.
+        </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto mt-10 px-2">
-          <a href="https://wa.me/5567998187301?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" class="bg-[#FF7A00] hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition-all shadow-md uppercase tracking-wider text-xs flex items-center justify-center">Solicitar Orçamento</a>
-          <a href="https://wa.me/5567998187301?text=Ol%C3%A1%2C%20vim%20atrav%C3%A9s%20do%20site%20da%20V%26K." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl transition-all shadow-md uppercase tracking-wider text-xs flex items-center justify-center gap-1.5">Falar no WhatsApp</a>
-          <button class="open-assist-btn bg-[#0A2342] border border-white/20 hover:border-[#FF7A00] text-white font-bold py-4 rounded-xl transition-all uppercase tracking-wider text-xs flex items-center justify-center cursor-pointer">Assistência Técnica</button>
-          <button class="open-locacao-btn bg-[#1E4E8C] border border-white/20 hover:border-[#FF7A00] text-white font-bold py-4 rounded-xl transition-all uppercase tracking-wider text-xs flex items-center justify-center cursor-pointer">Locação</button>
+          <a href="https://wa.me/5567998187301?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" class="bg-[#FF7A00] hover:bg-orange-600 text-white font-bold py-4 px-5 rounded-xl transition-all duration-300 shadow-md uppercase tracking-wider text-xs text-center flex items-center justify-center">
+            Solicitar Orçamento
+          </a>
+          <a href="https://wa.me/5567998187301?text=Ol%C3%A1%2C%20vim%20atrav%C3%A9s%20do%20site%20da%20V%26K." target="_blank" class="bg-green-600 hover:bg-green-700 md:bg-[#25D366] md:hover:bg-[#128C7E] text-white font-bold py-4 px-5 rounded-xl transition-all duration-300 shadow-md uppercase tracking-wider text-xs text-center flex items-center justify-center gap-1.5">
+            <i class="fab fa-whatsapp text-sm mr-1.5"></i> Falar no WhatsApp
+          </a>
+          <button class="open-assist-btn bg-[#0A2342] border border-white/20 hover:border-[#FF7A00] text-white font-bold py-4 px-5 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs flex items-center justify-center cursor-pointer">
+            Assistência Técnica
+          </button>
+          <button class="open-locacao-btn bg-[#1E4E8C] border border-white/20 hover:border-[#FF7A00] text-white font-bold py-4 px-5 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs flex items-center justify-center cursor-pointer">
+            Locação
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- SEÇÃO LOJA -->
+    <!-- 4. SEÇÃO LOJA -->
     <section id="loja" class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div class="text-center max-w-3xl mx-auto mb-12 fade-in-on-scroll">
-          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-[#FF7A00]/10 px-4 py-1.5 rounded-full inline-block mb-3">Ferramentas & Equipamentos</span>
+          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-[#FF7A00]/10 px-4 py-1.5 rounded-full inline-block mb-3">
+            Ferramentas & Equipamentos
+          </span>
           <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342]">Loja</h2>
           <div class="w-12 h-1 bg-[#FF7A00] mx-auto mt-3 mb-4"></div>
-          <p class="text-slate-600 text-sm md:text-base leading-relaxed">Confira nossa linha completa de ferramentas e equipamentos para construção civil. Oferecemos vendas de marcas líderes como Makita, Vonder, DWT, Menegotti, Stanley e Dewalt.</p>
+          <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+            Confira nossa linha completa de ferramentas, acessórios, materiais elétricos, hidráulicos e equipamentos para construção. Trabalhamos com a venda de equipamentos novos das melhores marcas do mercado, como MAKITA, VONDER, DWT, JACTO, WORKER, MENEGOTTI, STIHL, KARCHER, STANLEY, DEWALT, BLACK&DECKER, entre outras. Tudo o que você precisa em um só lugar!
+          </p>
         </div>
 
         <!-- CARROSSEL PRINCIPAL -->
         <div class="relative mb-16 fade-in-on-scroll">
           <div id="carousel-container" class="relative h-[220px] sm:h-[350px] lg:h-[500px] rounded-2xl overflow-hidden shadow-xl bg-[#0A2342]">
+            
+            <!-- Slides -->
             <div class="carousel-slide absolute inset-0 transition-all duration-700 ease-in-out">
               <img src="https://i.ibb.co/qFdwtxzn/In-Shot-20260620-140452181.jpg" alt="V&K Loja 1" class="w-full h-full object-cover" />
             </div>
@@ -158,10 +354,16 @@
 
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10 pointer-events-none"></div>
 
-            <button id="prev-slide-btn" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-[#FF7A00] text-white rounded-full flex items-center justify-center z-20"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-            <button id="next-slide-btn" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-[#FF7A00] text-white rounded-full flex items-center justify-center z-20"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+            <!-- Carousel Controls -->
+            <button id="prev-slide-btn" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-[#FF7A00] text-white rounded-full flex items-center justify-center transition-colors shadow z-20 cursor-pointer" aria-label="Anterior">
+              <i class="fas fa-chevron-left text-sm"></i>
+            </button>
+            <button id="next-slide-btn" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-[#FF7A00] text-white rounded-full flex items-center justify-center transition-colors shadow z-20 cursor-pointer" aria-label="Próximo">
+              <i class="fas fa-chevron-right text-sm"></i>
+            </button>
           </div>
 
+          <!-- Indicators -->
           <div class="flex justify-center gap-2 mt-4">
             <button class="carousel-indicator h-2.5 rounded-full transition-all duration-300 w-8 bg-[#FF7A00]" data-slide="0"></button>
             <button class="carousel-indicator h-2.5 rounded-full transition-all duration-300 w-2.5 bg-slate-300" data-slide="1"></button>
@@ -173,274 +375,916 @@
           </div>
         </div>
 
-        <!-- GALERIA DE FOTOS DO ESTOQUE -->
+        <!-- GALERIA FIXA DA LOJA -->
         <div class="fade-in-on-scroll">
-          <h3 class="text-lg md:text-xl font-display font-bold text-[#0A2342] mb-6 flex items-center gap-2 border-b border-slate-100 pb-3">Galeria do Nosso Estoque</h3>
+          <h3 class="text-lg md:text-xl font-display font-bold text-[#0A2342] mb-6 flex items-center gap-2 border-b border-slate-100 pb-3">
+            <i class="fas fa-search text-[#FF7A00]"></i>
+            Galeria do Nosso Estoque
+          </h3>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <!-- Grid de Fotos com disparadores de lightbox -->
-            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 desktop-contain-card">
-              <img src="https://i.ibb.co/VWMT2BXz/FB-IMG-1781658475319.jpg" alt="Estoque 1" class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 shadow-sm desktop-contain-card">
+              <img src="https://i.ibb.co/VWMT2BXz/FB-IMG-1781658475319.jpg" alt="Estoque V&K 1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-[#0A2342]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"><span class="text-white text-xs font-bold bg-[#FF7A00] px-3 py-1.5 rounded-lg">Ampliar</span></div>
             </div>
-            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 desktop-contain-card">
-              <img src="https://i.ibb.co/h1V5xTv8/FB-IMG-1781658462924.jpg" alt="Estoque 2" class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 shadow-sm desktop-contain-card">
+              <img src="https://i.ibb.co/h1V5xTv8/FB-IMG-1781658462924.jpg" alt="Estoque V&K 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-[#0A2342]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"><span class="text-white text-xs font-bold bg-[#FF7A00] px-3 py-1.5 rounded-lg">Ampliar</span></div>
             </div>
-            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 desktop-contain-card">
-              <img src="https://i.ibb.co/nqxh4784/In-Shot-20260616-213002828.jpg" alt="Estoque 3" class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 shadow-sm desktop-contain-card">
+              <img src="https://i.ibb.co/nqxh4784/In-Shot-20260616-213002828.jpg" alt="Estoque V&K 3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-[#0A2342]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"><span class="text-white text-xs font-bold bg-[#FF7A00] px-3 py-1.5 rounded-lg">Ampliar</span></div>
             </div>
-            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 desktop-contain-card">
-              <img src="https://i.ibb.co/6JZhc8Fy/FB-IMG-1781658756687.jpg" alt="Estoque 4" class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 shadow-sm desktop-contain-card">
+              <img src="https://i.ibb.co/6JZhc8Fy/FB-IMG-1781658756687.jpg" alt="Estoque V&K 4" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-[#0A2342]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"><span class="text-white text-xs font-bold bg-[#FF7A00] px-3 py-1.5 rounded-lg">Ampliar</span></div>
             </div>
-            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 desktop-contain-card">
-              <img src="https://i.ibb.co/ZzQzfcsX/FB-IMG-1781658619125.jpg" alt="Estoque 5" class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 shadow-sm desktop-contain-card">
+              <img src="https://i.ibb.co/ZzQzfcsX/FB-IMG-1781658619125.jpg" alt="Estoque V&K 5" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-[#0A2342]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"><span class="text-white text-xs font-bold bg-[#FF7A00] px-3 py-1.5 rounded-lg">Ampliar</span></div>
             </div>
-            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 desktop-contain-card">
-              <img src="https://i.ibb.co/Q7sXNK68/FB-IMG-1781658601221.jpg" alt="Estoque 6" class="w-full h-full object-cover transition-transform group-hover:scale-105" />
+            <div class="lightbox-trigger relative h-48 sm:h-60 bg-slate-100 rounded-xl overflow-hidden cursor-zoom-in group border border-slate-150 shadow-sm desktop-contain-card">
+              <img src="https://i.ibb.co/Q7sXNK68/FB-IMG-1781658601221.jpg" alt="Estoque V&K 6" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-[#0A2342]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"><span class="text-white text-xs font-bold bg-[#FF7A00] px-3 py-1.5 rounded-lg">Ampliar</span></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- MENEGOTTI PARCERIA -->
-    <section class="py-20 bg-slate-100 border-t border-b border-slate-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div class="fade-in-on-scroll">
-          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-orange-100 px-4 py-1.5 rounded-full inline-block mb-3">Parceiro Oficial</span>
-          <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342] leading-tight">Revendedor Autorizado Menegotti</h2>
-          <p class="text-slate-600 mt-4 leading-relaxed">Oferecemos a linha consagrada Menegotti, líder indiscutível em betoneiras e equipamentos para movimentação de concreto. Garantia oficial de fábrica, alta durabilidade e pronta entrega para a sua obra deslanchar.</p>
-          <div class="mt-8">
-            <a href="https://wa.me/5567998187301?text=Gostaria%20de%20saber%20mais%20sobre%20as%20betoneiras%20Menegotti." target="_blank" class="inline-flex bg-[#FF7A00] hover:bg-orange-600 text-white font-bold px-6 py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors shadow-md">Consultar Betoneiras</a>
+    <!-- 5. SEÇÃO MENEGOTTI -->
+    <section class="relative py-20 bg-[#0A2342] text-white overflow-hidden">
+      <div class="absolute inset-0 z-0 opacity-10">
+        <img src="https://i.ibb.co/Q7sXNK68/FB-IMG-1781658601221.jpg" alt="Menegotti" class="w-full h-full object-cover filter blur-[2px]" />
+      </div>
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7 space-y-4 fade-in-on-scroll">
+            <span class="inline-block bg-[#FF7A00]/10 border border-[#FF7A00]/30 text-[#FF7A00] font-bold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full">Revendedor Autorizado</span>
+            <h2 class="text-2xl md:text-4xl font-display font-bold">Revendedor Autorizado Menegotti</h2>
+            <div class="w-12 h-1 bg-[#FF7A00]"></div>
+            <p class="text-slate-300 text-sm md:text-base leading-relaxed font-light">
+              Nossa empresa trabalha em parceria autorizada com a <strong>Menegotti</strong>, oferecendo o melhor maquinário para construção civil. Betoneiras de alta durabilidade, peças genuínas e atendimento pós-venda garantido para sua obra não parar.
+            </p>
+            <a href="https://wa.me/5567998187301?text=Gostaria%20de%20ver%20equipamentos%20Menegotti." target="_blank" class="bg-[#FF7A00] hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider inline-flex items-center gap-1.5 transition-all">
+              Consultar Equipamentos
+            </a>
+          </div>
+          <div class="lg:col-span-5 fade-in-on-scroll">
+            <div class="rounded-xl overflow-hidden border-2 border-white/10 shadow-xl">
+              <img src="https://i.ibb.co/Q7sXNK68/FB-IMG-1781658601221.jpg" alt="Betoneira Menegotti" class="w-full h-auto object-cover" />
+            </div>
           </div>
         </div>
-        <div class="lightbox-trigger cursor-zoom-in fade-in-on-scroll rounded-2xl overflow-hidden border border-slate-200 shadow-lg desktop-contain-card">
-          <img src="https://i.ibb.co/Q7sXNK68/FB-IMG-1781658601221.jpg" alt="Betoneira Menegotti" class="w-full h-auto object-cover" />
-        </div>
       </div>
     </section>
 
-    <!-- QUEM SOMOS -->
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div class="lightbox-trigger cursor-zoom-in fade-in-on-scroll rounded-2xl overflow-hidden border border-slate-200 shadow-lg desktop-contain-card">
-          <img src="https://i.ibb.co/hJNnVZTK/In-Shot-20260625-223446724.jpg" alt="Quem Somos V&K" class="w-full h-auto object-cover" />
-        </div>
-        <div class="fade-in-on-scroll">
-          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-orange-100 px-4 py-1.5 rounded-full inline-block mb-3">Quem Somos</span>
-          <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342] leading-tight">V&K Assistência Técnica e Locação</h2>
-          <p class="text-slate-600 mt-4 leading-relaxed">Nascida com a missão de manter suas máquinas e obras funcionando com máxima produtividade. Com anos de experiência no mercado regional, fornecemos locação flexível de compactadores, betoneiras e rompedores, além de comercializar peças originais e executar serviços com garantia estendida.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- BANNER PARALLAX -->
-    <section class="relative h-[300px] sm:h-[400px] parallax-bg flex items-center justify-center text-center px-4" style="background-image: url('https://i.ibb.co/RTkysb2v/In-Shot-20260620-140146446.jpg');">
-      <div class="absolute inset-0 bg-slate-900/80"></div>
-      <div class="relative z-10 max-w-4xl mx-auto">
-        <h2 class="text-white text-2xl sm:text-4xl font-display font-bold leading-tight">Tecnologia, Robustez e Suporte em Cada Etapa do Seu Projeto</h2>
-        <p class="text-slate-300 mt-4 text-sm sm:text-base">Nossa equipe está pronta para atender suas demandas emergenciais ou planejadas.</p>
-      </div>
-    </section>
-
-    <!-- C&P CONSTRUÇÕES SHOWCASE -->
-    <section class="py-20 bg-white">
+    <!-- 6. SEÇÃO QUEM SOMOS -->
+    <section class="py-20 bg-slate-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div class="fade-in-on-scroll">
-            <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-orange-100 px-4 py-1.5 rounded-full inline-block mb-3">Grupo VK</span>
-            <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342] leading-tight">C&P Construções</h2>
-            <div class="w-12 h-1 bg-[#FF7A00] mt-3 mb-4"></div>
-            <p class="text-slate-600 leading-relaxed">Conheça a construtora do nosso grupo. Executamos projetos residenciais, comerciais e industriais de ponta, aliando engenharia refinada, maquinário próprio de última geração e cumprimento rígido de cronogramas.</p>
-            <div class="mt-8">
-              <button class="open-cp-btn bg-[#0A2342] hover:bg-[#1E4E8C] text-white font-bold px-6 py-3.5 rounded-xl uppercase tracking-wider text-xs transition-colors shadow-md cursor-pointer">Ver Projetos C&P</button>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 order-2 lg:order-1 fade-in-on-scroll">
+            <div class="relative">
+              <div class="absolute -top-3 -left-3 w-full h-full border-2 border-[#FF7A00] rounded-xl -z-10"></div>
+              <img src="https://i.ibb.co/hJNnVZTK/In-Shot-20260625-223446724.jpg" alt="Quem Somos" referrerPolicy="no-referrer" class="w-full h-80 object-cover object-center rounded-xl shadow-lg relative z-10 transition-transform duration-500 hover:scale-[1.02]" />
+              
+              <!-- Subtle vector corner framing accents -->
+              <div class="absolute -top-3 -left-3 w-8 h-8 border-t-2 border-l-2 border-[#FF7A00] rounded-tl-xl z-20 pointer-events-none"></div>
+              <div class="absolute -bottom-3 -right-3 w-8 h-8 border-b-2 border-r-2 border-[#FF7A00] rounded-br-xl z-20 pointer-events-none"></div>
             </div>
           </div>
-          <div class="lightbox-trigger cursor-zoom-in fade-in-on-scroll rounded-2xl overflow-hidden border border-slate-200 shadow-lg bg-slate-50 p-6 flex items-center justify-center">
-            <img src="https://i.ibb.co/d0KsT4MW/file-000000003b04720e85fc534fea545353.png" alt="C&P Construções" class="max-h-60 object-contain" />
+          <div class="lg:col-span-6 order-1 lg:order-2 space-y-4 fade-in-on-scroll">
+            <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-[#FF7A00]/10 px-4 py-1.5 rounded-full inline-block">Nossa Origem</span>
+            <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342]">Quem Somos</h2>
+            <div class="w-12 h-1 bg-[#FF7A00]"></div>
+            <p class="text-slate-700 text-sm md:text-base leading-relaxed">
+              A V&K Assistência Técnica e Locação nasceu para oferecer soluções completas para obras, reformas e manutenção, trabalhando com equipamentos de qualidade, assistência técnica especializada e locação de máquinas para profissionais e clientes residenciais.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- AVALIAÇÕES (TESTIMONIALS) -->
-    <section class="py-20 bg-slate-50 border-t border-b border-slate-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        <div class="text-center max-w-3xl mx-auto mb-12 fade-in-on-scroll">
-          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-orange-100 px-4 py-1.5 rounded-full inline-block mb-3">Depoimentos</span>
-          <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342]">Avaliações dos Clientes</h2>
-          <div class="w-12 h-1 bg-[#FF7A00] mx-auto mt-3 mb-4"></div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 fade-in-on-scroll">
-          <div class="lightbox-trigger cursor-zoom-in rounded-xl overflow-hidden border border-slate-150 shadow-sm bg-white desktop-contain-card h-40 sm:h-52">
-            <img src="https://i.ibb.co/cXTt6txk/In-Shot-20260621-230626330.jpg" alt="Avaliação 1" class="w-full h-full object-cover" />
-          </div>
-          <div class="lightbox-trigger cursor-zoom-in rounded-xl overflow-hidden border border-slate-150 shadow-sm bg-white desktop-contain-card h-40 sm:h-52">
-            <img src="https://i.ibb.co/0jJwLtYQ/In-Shot-20260621-230703250.jpg" alt="Avaliação 2" class="w-full h-full object-cover" />
-          </div>
-          <div class="lightbox-trigger cursor-zoom-in rounded-xl overflow-hidden border border-slate-150 shadow-sm bg-white desktop-contain-card h-40 sm:h-52">
-            <img src="https://i.ibb.co/8DCh1Qmh/In-Shot-20260621-230750237.jpg" alt="Avaliação 3" class="w-full h-full object-cover" />
-          </div>
-          <div class="lightbox-trigger cursor-zoom-in rounded-xl overflow-hidden border border-slate-150 shadow-sm bg-white desktop-contain-card h-40 sm:h-52">
-            <img src="https://i.ibb.co/nsBgc0J3/In-Shot-20260621-230838136.jpg" alt="Avaliação 4" class="w-full h-full object-cover" />
-          </div>
-          <div class="lightbox-trigger cursor-zoom-in rounded-xl overflow-hidden border border-slate-150 shadow-sm bg-white desktop-contain-card h-40 sm:h-52 col-span-2 md:col-span-1 mx-auto w-1/2 md:w-full">
-            <img src="https://i.ibb.co/ZRGxp6Mg/In-Shot-20260621-230933345.jpg" alt="Avaliação 5" class="w-full h-full object-cover" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- LOCALIZAÇÃO -->
+    <!-- 7. SEÇÃO DIFERENCIAIS -->
     <section class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div class="text-center max-w-3xl mx-auto mb-12 fade-in-on-scroll">
-          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-orange-100 px-4 py-1.5 rounded-full inline-block mb-3">Onde Estamos</span>
-          <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342]">Nossa Localização</h2>
+          <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342]">Nossos Diferenciais</h2>
+          <div class="w-12 h-1 bg-[#FF7A00] mx-auto mt-3"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-slate-50 border border-slate-100 p-6 rounded-xl hover:bg-[#0A2342] hover:text-white transition-all duration-300 group shadow-sm text-center flex flex-col items-center fade-in-on-scroll">
+            <div class="w-12 h-12 bg-[#FF7A00]/10 text-[#FF7A00] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#FF7A00]/20">
+              <i class="far fa-clock text-xl"></i>
+            </div>
+            <h3 class="font-display font-bold text-lg text-[#0A2342] group-hover:text-white">Atendimento Rápido</h3>
+            <p class="text-slate-500 group-hover:text-slate-300 text-xs mt-2 leading-relaxed">Respondemos orçamentos com máxima agilidade para manter sua produtividade.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-100 p-6 rounded-xl hover:bg-[#0A2342] hover:text-white transition-all duration-300 group shadow-sm text-center flex flex-col items-center fade-in-on-scroll">
+            <div class="w-12 h-12 bg-[#FF7A00]/10 text-[#FF7A00] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#FF7A00]/20">
+              <i class="fas fa-tools text-xl"></i>
+            </div>
+            <h3 class="font-display font-bold text-lg text-[#0A2342] group-hover:text-white">Assistência Especializada</h3>
+            <p class="text-slate-500 group-hover:text-slate-300 text-xs mt-2 leading-relaxed">Reparos multimarcas qualificados com total zelo e garantias técnicas.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-100 p-6 rounded-xl hover:bg-[#0A2342] hover:text-white transition-all duration-300 group shadow-sm text-center flex flex-col items-center fade-in-on-scroll">
+            <div class="w-12 h-12 bg-[#FF7A00]/10 text-[#FF7A00] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#FF7A00]/20">
+              <i class="fas fa-truck-loading text-xl"></i>
+            </div>
+            <h3 class="font-display font-bold text-lg text-[#0A2342] group-hover:text-white">Locação de Equipamentos</h3>
+            <p class="text-slate-500 group-hover:text-slate-300 text-xs mt-2 leading-relaxed">Máquinas novas e revisadas, prontas para suportar demandas intensas.</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-100 p-6 rounded-xl hover:bg-[#0A2342] hover:text-white transition-all duration-300 group shadow-sm text-center flex flex-col items-center fade-in-on-scroll">
+            <div class="w-12 h-12 bg-[#FF7A00]/10 text-[#FF7A00] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#FF7A00]/20">
+              <i class="far fa-star text-xl"></i>
+            </div>
+            <h3 class="font-display font-bold text-lg text-[#0A2342] group-hover:text-white">Revendedor Autorizado</h3>
+            <p class="text-slate-500 group-hover:text-slate-300 text-xs mt-2 leading-relaxed">Trabalhamos apenas com o portfólio oficial de grandes marcas industriais.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. SEÇÃO PARALLAX -->
+    <section class="relative py-40 parallax-bg flex items-center justify-center" style="background-image: url('https://i.ibb.co/RTkysb2v/In-Shot-20260620-140146446.jpg');">
+      <div class="absolute inset-0 bg-[#0A2342]/80 z-0"></div>
+      <div class="relative z-10 text-center text-white px-4 max-w-3xl mx-auto space-y-4 fade-in-on-scroll">
+        <h2 class="text-2xl sm:text-4xl font-display font-bold uppercase tracking-wide text-[#FF7A00]">Equipamentos de Extremo Desempenho</h2>
+        <div class="w-16 h-1 bg-white mx-auto"></div>
+        <p class="text-sm sm:text-lg font-light text-slate-200">Qualidade profissional máxima para garantir a agilidade e a excelência que seus projetos merecem.</p>
+        <button class="open-assist-btn bg-[#FF7A00] hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-xl transition-all uppercase tracking-wider text-xs inline-flex items-center gap-1.5 cursor-pointer">Solicitar Diagnóstico Rápido</button>
+      </div>
+    </section>
+
+    <!-- 9. PARCEIRO DE NEGÓCIO - C&P CONSTRUÇÕES SHOWCASE CARD -->
+    <section class="py-16 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div class="relative bg-[#3A3A3A] border border-[#4F4F4F] rounded-2xl p-6 sm:p-10 shadow-md flex flex-col lg:flex-row gap-8 items-center justify-between fade-in-on-scroll">
+          <!-- Floating Partnership Logo in the top-right corner -->
+          <div class="absolute top-4 right-4 sm:top-6 sm:right-6 pointer-events-none select-none">
+            <img src="https://i.ibb.co/d0KsT4MW/file-000000003b04720e85fc534fea545353.png" alt="C&P Logo" class="h-16 sm:h-24 w-auto object-contain opacity-95" referrerPolicy="no-referrer" />
+          </div>
+
+          <div class="space-y-4 max-w-2xl">
+            <span class="bg-slate-200 border border-slate-300 text-[#0A2342] font-bold text-xs uppercase tracking-widest px-3 py-1 rounded-full inline-block">Parceria de Sucesso</span>
+            <h2 class="text-2xl md:text-3xl font-display font-bold text-[#FFFFFF]">Construções ou Reformas?</h2>
+            <p class="text-[#FFFFFF] text-sm leading-relaxed">Apresentamos nossa parceira oficial <strong class="text-[#FFFFFF]">C&P Construções</strong>! Equipe experiente em erguer e reformar imóveis comerciais e residenciais com excelência.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto z-10">
+            <button class="open-cp-btn bg-[#00BCD4] hover:bg-[#00ACC1] text-white font-bold px-6 py-4 rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer">Conhecer C&P</button>
+            <a href="https://wa.me/5567999350172?text=Ol%C3%A1%20vim%20pelo%20site%20da%20v%26k%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento." target="_blank" class="bg-[#FF8C00] hover:bg-[#E07A00] text-white font-bold px-6 py-4 rounded-xl text-xs uppercase tracking-wider transition-all text-center">Falar com Engenheiro</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. SEÇÃO AVALIAÇÕES -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div class="text-center max-w-3xl mx-auto mb-12 fade-in-on-scroll">
+          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-[#FF7A00]/10 px-4 py-1.5 rounded-full inline-block mb-3">Satisfação de Nossos Clientes</span>
+          <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342]">Avaliações de Clientes</h2>
           <div class="w-12 h-1 bg-[#FF7A00] mx-auto mt-3 mb-4"></div>
-          <p class="text-slate-600 text-sm md:text-base">Venha conhecer a nossa sede e conferir nosso estoque de perto!</p>
+          <p class="text-slate-600 text-sm">Clique nas avaliações abaixo para visualizá-las em tela cheia.</p>
         </div>
 
-        <div class="fade-in-on-scroll rounded-2xl overflow-hidden shadow-lg border border-slate-200 h-[350px] sm:h-[450px]">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3738.358215682885!2d-54.6434444!3d-20.4504167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9486e64177f154fb%3A0xf6398f62cce6adc7!2sR.%20Afonso%20Pena%2C%205315%20-%20Ch%C3%A1cara%20Cachoeira%2C%20Campo%20Grande%20-%20MS%2C%2079040-010!5e0!3m2!1spt-BR!2sbr!4v1688123456789!5m2!1spt-BR!2sbr" class="w-full h-full border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 fade-in-on-scroll">
+          <div class="lightbox-trigger relative bg-slate-50 border border-slate-100 p-1.5 rounded-xl cursor-zoom-in overflow-hidden shadow-sm group">
+            <img src="https://i.ibb.co/cXTt6txk/In-Shot-20260621-230626330.jpg" alt="Avaliação 1" class="w-full h-auto rounded-lg group-hover:scale-102 transition-transform" />
+          </div>
+          <div class="lightbox-trigger relative bg-slate-50 border border-slate-100 p-1.5 rounded-xl cursor-zoom-in overflow-hidden shadow-sm group">
+            <img src="https://i.ibb.co/0jJwLtYQ/In-Shot-20260621-230703250.jpg" alt="Avaliação 2" class="w-full h-auto rounded-lg group-hover:scale-102 transition-transform" />
+          </div>
+          <div class="lightbox-trigger relative bg-slate-50 border border-slate-100 p-1.5 rounded-xl cursor-zoom-in overflow-hidden shadow-sm group">
+            <img src="https://i.ibb.co/8DCh1Qmh/In-Shot-20260621-230750237.jpg" alt="Avaliação 3" class="w-full h-auto rounded-lg group-hover:scale-102 transition-transform" />
+          </div>
+          <div class="lightbox-trigger relative bg-slate-50 border border-slate-100 p-1.5 rounded-xl cursor-zoom-in overflow-hidden shadow-sm group">
+            <img src="https://i.ibb.co/nsBgc0J3/In-Shot-20260621-230838136.jpg" alt="Avaliação 4" class="w-full h-auto rounded-lg group-hover:scale-102 transition-transform" />
+          </div>
+          <div class="lightbox-trigger relative bg-slate-50 border border-slate-100 p-1.5 rounded-xl cursor-zoom-in overflow-hidden shadow-sm group">
+            <img src="https://i.ibb.co/ZRGxp6Mg/In-Shot-20260621-230933345.jpg" alt="Avaliação 5" class="w-full h-auto rounded-lg group-hover:scale-102 transition-transform" />
+          </div>
+        </div>
+
+        <!-- 11. SEÇÃO GOOGLE -->
+        <div class="mt-12 bg-slate-50 border border-slate-150 rounded-2xl p-6 sm:p-8 text-center max-w-2xl mx-auto fade-in-on-scroll">
+          <h3 class="text-lg md:text-xl font-display font-bold text-[#0A2342]">Deixe sua Avaliação</h3>
+          <p class="text-slate-600 text-xs sm:text-sm mt-1">Sua opinião é muito importante para nós.</p>
+          <div class="mt-4">
+            <a href="https://g.page/r/CamvG8zIixv9EBM/review" target="_blank" class="inline-block bg-[#0A2342] hover:bg-[#1E4E8C] text-white font-bold py-3 px-6 rounded-lg text-xs uppercase tracking-wider transition-colors shadow">Avaliar no Google</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- FORMAS DE PAGAMENTO -->
-    <section class="py-12 bg-slate-50 border-t border-slate-200">
-      <div class="max-w-7xl mx-auto px-4 text-center">
-        <h3 class="text-[#0A2342] font-display font-semibold text-sm uppercase tracking-wider mb-6">Formas de Pagamento Aceitas</h3>
-        <div class="flex items-center justify-center">
-          <img src="https://i.ibb.co/rR0kP5jH/In-Shot-20260628-180425899.png" alt="Formas de Pagamento" class="max-h-16 object-contain" />
+    <!-- 13. LOCALIZAÇÃO -->
+    <section id="localizacao" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div class="max-w-2xl mx-auto flex flex-col items-center text-center space-y-6 fade-in-on-scroll">
+          <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-[#FF7A00]/10 px-4 py-1.5 rounded-full inline-block">Visite Nossa Sede</span>
+          <h2 class="text-2xl md:text-4xl font-display font-bold text-[#0A2342]">Localização</h2>
+          <div class="w-12 h-1 bg-[#FF7A00]"></div>
+          
+          <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+            <strong>Endereço:</strong><br />
+            Rua Edson Bezerra, 431<br />
+            Centro, Itaporã - MS<br />
+            CEP: 79890-011
+          </p>
+
+          <div class="pt-2">
+            <a href="https://www.google.com/maps/search/?api=1&query=-22.082830282109523,-54.78516046897598" target="_blank" class="bg-[#FF7A00] hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-xl text-xs uppercase tracking-wider inline-flex items-center gap-1.5 transition-all shadow-lg shadow-orange-500/15 active:scale-95">
+              COMO CHEGAR
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- RODAPÉ (FOOTER) - Com Padding Aumentado conforme solicitado -->
-    <footer class="bg-[#0A2342] text-white py-12 border-t border-white/10 relative">
-      <div id="footer-text-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 text-center pb-24 md:pb-28">
-        <img src="https://i.ibb.co/XZyY6M7b/Logo.png" alt="V&K Logo" class="h-16 w-auto mx-auto mb-6 object-contain" />
-        <p class="text-sm text-slate-400">&copy; 2026 V&K Assistência Técnica e Locação. Todos os direitos reservados.</p>
-        <p class="text-xs text-slate-500 mt-2">CNPJ: 50.142.138/0001-31 | R. Afonso Pena, 5315 - Chácara Cachoeira, Campo Grande - MS</p>
+    <!-- 14. CONTATO -->
+    <section class="py-20 bg-[#0A2342] text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div class="lg:col-span-6 space-y-4 fade-in-on-scroll">
+            <span class="text-[#FF7A00] font-bold text-xs uppercase tracking-widest bg-[#FF7A00]/10 px-4 py-1.5 rounded-full inline-block">Atendimento</span>
+            <h2 class="text-2xl md:text-4xl font-display font-bold">Entre em Contato</h2>
+            <div class="w-12 h-1 bg-[#FF7A00]"></div>
+            <p class="text-slate-300 text-sm font-light">Estamos à disposição para triagem de máquinas e cotações de locação.</p>
+
+            <div class="space-y-4 pt-4">
+              <a href="https://wa.me/5567998187301" target="_blank" class="flex items-center gap-3 hover:text-[#FF7A00] transition-colors">
+                <div class="w-10 h-10 bg-white/5 border border-white/10 text-[#FF7A00] rounded-xl flex items-center justify-center shrink-0">
+                  <i class="fab fa-whatsapp text-xl"></i>
+                </div>
+                <div><p class="text-[10px] uppercase font-bold text-slate-400">WhatsApp Comercial</p><p class="text-base font-display font-semibold">(67) 99818-7301</p></div>
+              </a>
+              <a href="mailto:Vklocacoes03@gmail.com" class="flex items-center gap-3 hover:text-[#FF7A00] transition-colors">
+                <div class="w-10 h-10 bg-white/5 border border-white/10 text-[#FF7A00] rounded-xl flex items-center justify-center shrink-0">
+                  <i class="far fa-envelope text-lg"></i>
+                </div>
+                <div><p class="text-[10px] uppercase font-bold text-slate-400">E-mail</p><p class="text-base font-display font-semibold">Vklocacoes03@gmail.com</p></div>
+              </a>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/5 border border-white/10 text-[#FF7A00] rounded-xl flex items-center justify-center shrink-0">
+                  <i class="far fa-clock text-lg"></i>
+                </div>
+                <div><p class="text-[10px] uppercase font-bold text-slate-400">Horário</p><p class="text-sm font-semibold">Segunda à Sábado: 06:30 às 17:30</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 fade-in-on-scroll">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 space-y-4">
+              <h3 class="text-lg font-display font-bold border-b border-white/10 pb-3">Atendimento Rápido</h3>
+              <p class="text-slate-300 text-xs sm:text-sm font-light leading-relaxed">Clique em uma das opções abaixo para iniciar uma conversa imediata com nosso time de atendimento:</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <a href="https://wa.me/5567998187301?text=Olá,%20gostaria%20de%20um%20orçamento%20para%20assistência%20técnica." target="_blank" class="bg-[#FF7A00] hover:bg-orange-600 text-white font-bold p-3.5 rounded-xl text-center uppercase tracking-wider text-[10px] flex items-center justify-center gap-1.5 transition-all">Assistência Técnica</a>
+                <a href="https://wa.me/5567998187301?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento%20para%20locação." target="_blank" class="bg-[#1E4E8C] hover:bg-blue-700 text-white font-bold p-3.5 rounded-xl text-center uppercase tracking-wider text-[10px] flex items-center justify-center gap-1.5 transition-all">Locar Equipamentos</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. FORMAS DE PAGAMENTO -->
+    <section class="py-4 bg-[#081829] border-t border-b border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 text-center">
+        <h4 class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Formas de Pagamento</h4>
+        <div class="flex justify-center items-center">
+          <img 
+            src="https://i.ibb.co/rR0kP5jH/In-Shot-20260628-180425899.png" 
+            alt="Formas de Pagamento" 
+            class="max-w-full h-auto max-h-[200px] sm:max-h-[280px] md:max-h-[360px] object-contain"
+            referrerpolicy="no-referrer"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- 15. RODAPÉ -->
+    <footer class="bg-[#051427] text-slate-400 py-8 border-t border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+        <div class="flex items-center gap-2">
+          <img src="https://i.ibb.co/XZyY6M7b/Logo.png" alt="V&K Footer" class="h-8 w-auto" />
+          <span class="text-[#FF7A00] text-xs font-sans font-medium block uppercase tracking-wider">Assistência técnica Locação e Loja</span>
+        </div>
+        <p class="text-center">© 2026 V&K Assistência Técnica e Locação.<br>Todos os direitos reservados. • CNPJ: 54.478.297/0001-24</p>
       </div>
     </footer>
 
-    <!-- BOTÕES FLUTUANTES -->
-    <button id="back-to-top" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#FF7A00] hover:bg-orange-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-all duration-300 opacity-0 pointer-events-none z-40" aria-label="Subir ao Topo">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-    </button>
-
-    <a href="https://wa.me/5567998187301" target="_blank" class="fixed bottom-6 right-6 bg-[#25D366] hover:bg-[#128C7E] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl z-40 animate-whatsapp-pulse cursor-pointer" aria-label="Falar no WhatsApp">
-      <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12.031 2c-5.516 0-10 4.478-10 10 0 1.772.463 3.432 1.272 4.881l-1.303 4.757 4.886-1.28c1.401.762 2.992 1.196 4.68 1.196 5.516 0 10-4.478 10-10s-4.484-10-10-10zm.115 16.541c-1.565 0-3.085-.421-4.417-1.218l-.317-.189-2.909.762.777-2.836-.208-.33c-.875-1.391-1.336-3.006-1.336-4.679 0-4.646 3.791-8.431 8.441-8.431s8.439 3.785 8.439 8.431-3.79 8.49-8.439 8.49z"/></svg>
+    <!-- 16. BOTÃO FLUTUANTE DE WHATSAPP -->
+    <a href="https://wa.me/5567998187301?text=Ol%C3%A1%2C%20vim%20atrav%C3%A9s%20do%20site%20da%20V%26K%20Assist%C3%AAncia%20T%C3%A9cnica%20e%20gostaria%20de%20uma%20informa%C3%A7%C3%A3o." target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 md:bg-[#25D366] md:hover:bg-[#128C7E] text-white rounded-full flex items-center justify-center shadow-lg transition-all z-40 animate-whatsapp-pulse cursor-pointer group" title="WhatsApp">
+      <i class="fab fa-whatsapp text-3xl transition-transform duration-300 group-hover:scale-110"></i>
     </a>
 
-    <!-- MODAL ASSISTÊNCIA TÉCNICA -->
-    <div id="assist-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
-      <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-modal shadow-2xl">
-        <div class="bg-[#0A2342] text-white p-6 flex justify-between items-center sticky top-0 z-10">
-          <div>
-            <h3 class="font-display font-bold text-lg uppercase tracking-wide">Quadro de Orçamento Inteligente</h3>
-            <p class="text-[#FF7A00] text-xs mt-1">Preencha para obter agendamento prioritário na nossa oficina.</p>
-          </div>
-          <button class="close-modal-btn text-white/80 hover:text-white p-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
-          </button>
+    <!-- 16.2. BOTÃO FLUTUANTE VOLTAR AO TOPO -->
+    <button id="back-to-top" class="fixed bottom-[20px] left-1/2 -translate-x-1/2 w-12 h-12 bg-[#FF7A00] hover:bg-[#E06A00] text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 z-50 opacity-0 pointer-events-none cursor-pointer group hover:scale-110 active:scale-95" title="Voltar ao Topo">
+      <i class="fas fa-chevron-up text-lg transition-transform duration-300 group-hover:-translate-y-0.5"></i>
+    </button>
+
+    <!-- 17. MODAL ASSISTÊNCIA TÉCNICA (TELA CHEIA) -->
+    <div id="assist-modal" class="fixed inset-0 z-50 bg-[#0A2342] hidden flex-col w-full h-full overflow-y-auto">
+      <!-- Top of Page Header -->
+      <header class="w-full h-16 bg-[#071d37] px-6 flex items-center justify-between border-b border-[#FF7A00]/20 shrink-0">
+        <!-- VK Logo in orange -->
+        <div class="flex items-center gap-1.5 cursor-pointer close-modal-btn">
+          <span class="text-[#FF7A00] text-3xl font-display font-extrabold tracking-wider">VK</span>
+          <span class="text-white text-xs uppercase tracking-widest font-semibold border-l border-white/20 pl-2">Assistência</span>
         </div>
-        <form id="assist-form" class="p-6 space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-[#0A2342] uppercase tracking-wider mb-1">Seu Nome</label>
-            <input type="text" id="assist-nome" required class="w-full bg-slate-50 border border-slate-250 rounded-lg px-4 py-2.5 focus:outline-none focus:border-[#FF7A00]" />
+        
+        <!-- Hamburger Menu (Três Linhas) -->
+        <button class="close-modal-btn text-white hover:text-[#FF7A00] p-1.5 rounded-lg transition-colors cursor-pointer" aria-label="Fechar">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </header>
+
+      <!-- Main Content Area -->
+      <main class="flex-1 w-full flex items-center justify-center p-4 sm:p-8">
+        <div class="w-full max-w-xl bg-[#091b33] border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+          <!-- Title Group -->
+          <div class="text-center space-y-2">
+            <h2 class="text-2xl sm:text-3xl font-display font-extrabold tracking-tight text-white uppercase">Quadro de Orçamento Inteligente</h2>
+            <p class="text-sm text-slate-300">Preencha para obter agendamento prioritário na nossa oficina.</p>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-[#0A2342] uppercase tracking-wider mb-1">WhatsApp de Contato</label>
-            <input type="tel" id="assist-tel" required class="w-full bg-slate-50 border border-slate-250 rounded-lg px-4 py-2.5 focus:outline-none focus:border-[#FF7A00]" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-[#0A2342] uppercase tracking-wider mb-1">Modelo / Marca do Equipamento</label>
-            <input type="text" id="assist-equipamento" required class="w-full bg-slate-50 border border-slate-250 rounded-lg px-4 py-2.5 focus:outline-none focus:border-[#FF7A00]" />
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-[#0A2342] uppercase tracking-wider mb-1">Defeito Relatado</label>
-            <textarea id="assist-descricao" required rows="3" class="w-full bg-slate-50 border border-slate-250 rounded-lg px-4 py-2.5 focus:outline-none focus:border-[#FF7A00] resize-none"></textarea>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-colors">Enviar para WhatsApp</button>
-            <button id="assist-print-btn" type="button" class="bg-slate-700 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-colors">Imprimir Recibo</button>
-          </div>
-        </form>
-      </div>
+
+          <form id="assist-form" class="space-y-5">
+            <!-- SEU NOME -->
+            <div class="space-y-1.5">
+              <label for="assist-nome" class="text-xs font-bold uppercase tracking-wider text-slate-300 block">SEU NOME</label>
+              <input type="text" id="assist-nome" required placeholder="João da Silva" class="w-full bg-[#FFFFFF] border-2 border-transparent focus:border-[#FF7A00] outline-none rounded-xl px-4 py-3.5 text-base text-black placeholder:text-slate-500 font-semibold transition-all shadow-sm" />
+            </div>
+
+            <!-- WHATSAPP DE CONTATO -->
+            <div class="space-y-1.5">
+              <label for="assist-tel" class="text-xs font-bold uppercase tracking-wider text-slate-300 block">WHATSAPP DE CONTATO</label>
+              <input type="tel" id="assist-tel" required placeholder="(67) 9 9999-9999" class="w-full bg-[#FFFFFF] border-2 border-transparent focus:border-[#FF7A00] outline-none rounded-xl px-4 py-3.5 text-base text-black placeholder:text-slate-500 font-semibold transition-all shadow-sm" />
+            </div>
+
+            <!-- MODELO / MARCA DO EQUIPAMENTO -->
+            <div class="space-y-1.5">
+              <label for="assist-equipamento" class="text-xs font-bold uppercase tracking-wider text-slate-300 block">MODELO / MARCA DO EQUIPAMENTO</label>
+              <input type="text" id="assist-equipamento" required placeholder="Ex: Martelete Menegotti MMR 1300" class="w-full bg-[#FFFFFF] border-2 border-transparent focus:border-[#FF7A00] outline-none rounded-xl px-4 py-3.5 text-base text-black placeholder:text-slate-500 font-semibold transition-all shadow-sm" />
+            </div>
+
+            <!-- DEFEITO RELATADO -->
+            <div class="space-y-1.5">
+              <label for="assist-descricao" class="text-xs font-bold uppercase tracking-wider text-slate-300 block">DEFEITO RELATADO</label>
+              <textarea id="assist-descricao" required rows="3" placeholder="Descreva o sintoma, ruído ou falha observada..." class="w-full bg-[#FFFFFF] border-2 border-transparent focus:border-[#FF7A00] outline-none rounded-xl px-4 py-3.5 text-base text-black placeholder:text-slate-500 font-semibold transition-all shadow-sm resize-none"></textarea>
+            </div>
+
+            <!-- Submitting Section with Print Option -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <button type="submit" class="bg-[#FFB300] hover:bg-[#E5A900] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-yellow-500/10 cursor-pointer">
+                <i class="fab fa-whatsapp text-base"></i> Enviar WhatsApp
+              </button>
+              <button type="button" id="assist-print-btn" class="bg-slate-700 hover:bg-slate-600 text-white font-extrabold py-3.5 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 uppercase tracking-wider text-xs flex items-center justify-center gap-1.5 shadow-lg cursor-pointer">
+                <i class="fas fa-print text-base"></i> Imprimir Ficha
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
     </div>
 
-    <!-- MODAL LOCAÇÃO -->
-    <div id="locacao-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
-      <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto animate-modal shadow-2xl">
-        <div class="bg-[#1E4E8C] text-white p-6 flex justify-between items-center sticky top-0 z-10">
-          <div>
-            <h3 class="font-display font-bold text-lg uppercase tracking-wide">Linha de Locação V&K</h3>
-            <p class="text-slate-200 text-xs mt-1">Disponibilidade rápida e logística facilitada.</p>
-          </div>
-          <button class="close-modal-btn text-white/80 hover:text-white p-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+    <!-- 18. MODAL LOCAÇÃO -->
+    <div id="locacao-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+      <div class="absolute inset-0 bg-[#0A2342]/85 backdrop-blur-sm"></div>
+      <div class="relative bg-white text-slate-900 w-full max-w-lg rounded-xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[90vh] border border-slate-150 animate-modal">
+        <div class="bg-[#0A2342] text-white p-5 flex justify-between items-center border-b border-[#FF7A00]/20">
+          <h3 class="text-base font-display font-bold uppercase tracking-wide">Locação de Equipamentos</h3>
+          <button class="close-modal-btn text-white hover:text-[#FF7A00] p-1 cursor-pointer">
+            <i class="fas fa-times text-lg"></i>
           </button>
         </div>
-        <div class="p-6 space-y-6">
-          <p class="text-slate-600 text-sm">Oferecemos equipamentos robustos e revisados para garantir que sua produtividade não pare:</p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="lightbox-trigger relative rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in h-40 sm:h-48 desktop-contain-card">
+        <div class="p-5 overflow-y-auto space-y-5">
+          <div class="bg-slate-50 border border-slate-150 p-4 rounded-xl text-center">
+            <h4 class="text-brand-navy font-display font-bold text-sm">Cote Suas Máquinas Conosco</h4>
+            <p class="text-slate-500 text-xs mt-1 leading-relaxed">Selecione equipamentos revisados e prontos para obras residenciais ou comerciais. Preço justo e suporte imediato.</p>
+            <a href="https://wa.me/5567998187301?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento%20para%20locação." target="_blank" class="mt-3 bg-[#FF7A00] hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-lg text-xs tracking-wider uppercase inline-flex items-center gap-1.5">Faça seu orçamento</a>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="lightbox-trigger relative h-28 bg-slate-100 rounded-lg overflow-hidden cursor-zoom-in border border-slate-150 desktop-contain-card">
               <img src="https://i.ibb.co/HLYDJrjR/In-Shot-20260616-213424980.jpg" alt="Locação 1" class="w-full h-full object-cover" />
             </div>
-            <div class="lightbox-trigger relative rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in h-40 sm:h-48 desktop-contain-card">
+            <div class="lightbox-trigger relative h-28 bg-slate-100 rounded-lg overflow-hidden cursor-zoom-in border border-slate-150 desktop-contain-card">
               <img src="https://i.ibb.co/bjPmjccG/Screenshot-20260616-211218-Facebook.jpg" alt="Locação 2" class="w-full h-full object-cover" />
             </div>
-          </div>
-          <div class="pt-4 flex justify-end">
-            <a href="https://wa.me/5567998187301?text=Gostaria%20de%20saber%20valores%20e%20disponibilidade%20para%20locação." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-xl uppercase tracking-wider text-xs transition-colors shadow">Consultar Disponibilidade</a>
+            <div class="lightbox-trigger relative h-28 bg-slate-100 rounded-lg overflow-hidden cursor-zoom-in border border-slate-150 desktop-contain-card">
+              <img src="https://i.ibb.co/m5Dknf4D/FB-IMG-1781658719960.jpg" alt="Locação 3" class="w-full h-full object-cover" />
+            </div>
+            <div class="lightbox-trigger relative h-28 bg-slate-100 rounded-lg overflow-hidden cursor-zoom-in border border-slate-150 desktop-contain-card">
+              <img src="https://i.ibb.co/fz6PVBzS/FB-IMG-1781658713881.jpg" alt="Locação 4" class="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- MODAL C&P CONSTRUÇÕES -->
-    <div id="cp-modal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
-      <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-modal shadow-2xl">
-        <div class="bg-[#0A2342] text-white p-6 flex justify-between items-center sticky top-0 z-10">
-          <h3 class="font-display font-bold text-lg uppercase tracking-wide">Portfólio C&P Construções</h3>
-          <button class="close-modal-btn text-white/80 hover:text-white p-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
-          </button>
-        </div>
-        <div class="p-6 space-y-6">
-          <p class="text-slate-600 text-sm">Confira imagens de nossas obras residenciais e comerciais de alta qualidade:</p>
-          <div class="grid grid-cols-2 gap-4">
-            <div class="lightbox-trigger relative rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in h-36 sm:h-44 desktop-contain-card">
-              <img src="https://i.ibb.co/m5Dknf4D/FB-IMG-1781658719960.jpg" alt="C&P Obra 1" class="w-full h-full object-cover" />
-            </div>
-            <div class="lightbox-trigger relative rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in h-36 sm:h-44 desktop-contain-card">
-              <img src="https://i.ibb.co/fz6PVBzS/FB-IMG-1781658713881.jpg" alt="C&P Obra 2" class="w-full h-full object-cover" />
-            </div>
+    <!-- 19. MODAL C&P CONSTRUÇÕES -->
+    <div id="cp-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+      <div class="absolute inset-0 bg-[#0A2342]/85 backdrop-blur-sm"></div>
+      <div class="relative bg-white text-slate-900 w-full h-full z-10 flex flex-col animate-modal items-center justify-center">
+        <div class="w-full max-w-4xl flex flex-col h-full bg-white relative shadow-2xl">
+          <div class="bg-[#0A2342] text-white p-5 flex justify-between items-center border-b border-[#FF7A00]/20">
+            <h3 class="text-base font-display font-bold uppercase tracking-wide">C&P Construções</h3>
+            <button class="close-modal-btn text-white hover:text-[#FF7A00] p-1 cursor-pointer">
+              <i class="fas fa-times text-lg"></i>
+            </button>
           </div>
-          <div class="pt-4 flex justify-end">
-            <a href="https://wa.me/5567998187301?text=Olá,%20gostaria%20de%20conversar%20sobre%20um%20projeto%20com%20a%20C%26P%20Construções." target="_blank" class="bg-[#0A2342] hover:bg-[#1E4E8C] text-white font-bold py-3.5 px-6 rounded-xl uppercase tracking-wider text-xs transition-colors shadow">Solicitar Reunião</a>
+          <div class="p-5 overflow-y-auto space-y-4 flex-1">
+            <div class="bg-slate-50 border border-slate-150 p-4 rounded-xl space-y-4">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h4 class="font-display font-bold text-sm text-[#0A2342]">C&P Construções</h4>
+                  <p class="text-[10px] text-slate-500">Parceria Comercial</p>
+                </div>
+                <a href="https://wa.me/5567999350172?text=Olá,%20gostaria%20de%20um%20orçamento%20para%20construção." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white md:text-black font-bold py-1.5 px-3 rounded text-[10px] tracking-wider uppercase inline-flex items-center gap-1 shrink-0">(67) 99935-0172</a>
+              </div>
+              <div class="flex justify-center items-center py-2 bg-white rounded-lg border border-slate-100 p-2 shadow-inner">
+                <img src="https://i.ibb.co/d0KsT4MW/file-000000003b04720e85fc534fea545353.png" alt="C&P Construções Parceria Comercial" class="max-w-full h-auto max-h-[400px] object-contain rounded-md" style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;" referrerPolicy="no-referrer" />
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <h4 class="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-100 pb-1">Especialidades</h4>
+              <div class="grid grid-cols-2 gap-1.5 text-xs text-slate-700">
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Construção residencial</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Construção comercial</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Reformas</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Ampliações</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Pintura</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Pisos</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Azulejos</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Telhados</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Muros</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Calçadas</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Elétrica & Hidráulica</span>
+                <span class="bg-slate-50 py-1.5 px-3 rounded font-medium">• Acabamentos</span>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <h4 class="text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-100 pb-1">Galeria de Obras</h4>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="h-20 bg-slate-900 rounded-lg flex flex-col items-center justify-center p-2 text-center border border-slate-800">
+                  <span class="text-[#FF7A00] font-display font-extrabold text-[10px] tracking-wider uppercase">EM BREVE</span>
+                  <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Mídias</span>
+                </div>
+                <div class="h-20 bg-slate-900 rounded-lg flex flex-col items-center justify-center p-2 text-center border border-slate-800">
+                  <span class="text-[#FF7A00] font-display font-extrabold text-[10px] tracking-wider uppercase">EM BREVE</span>
+                  <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Mídias</span>
+                </div>
+                <div class="h-20 bg-slate-900 rounded-lg flex flex-col items-center justify-center p-2 text-center border border-slate-800">
+                  <span class="text-[#FF7A00] font-display font-extrabold text-[10px] tracking-wider uppercase">EM BREVE</span>
+                  <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Mídias</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- LIGHTBOX (Visualizador de Imagens) -->
-    <div id="lightbox" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center p-4">
-      <button id="close-lightbox-btn" class="absolute top-6 right-6 text-white hover:text-[#FF7A00] p-2" aria-label="Fechar Visualizador">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+    <!-- 20. LIGHTBOX FULLSCREEN IMAGE VIEWER -->
+    <div id="lightbox" class="fixed inset-0 bg-black/95 z-[9999] flex items-center justify-center p-4 hidden">
+      <div class="absolute inset-0"></div>
+      <button id="close-lightbox-btn" class="absolute top-4 right-4 bg-[#0A2342] hover:bg-[#FF7A00] text-white p-3 rounded-full shadow-lg z-10 cursor-pointer">
+        <i class="fas fa-times text-xl"></i>
       </button>
-      <div class="max-w-4xl max-h-[85vh] overflow-hidden flex items-center justify-center p-2">
-        <img id="lightbox-img" src="" alt="Imagem ampliada" class="max-w-full max-h-full object-contain rounded shadow-2xl" />
-      </div>
+      <img id="lightbox-img" src="" alt="Ampliação" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl z-10 select-none" />
     </div>
 
-    <!-- SEÇÃO DE IMPRESSÃO (Cupom Oculto) -->
-    <div id="print-receipt-section" class="hidden p-4 font-mono text-sm leading-tight text-black bg-white">
-      <pre id="print-receipt-text" class="whitespace-pre-wrap font-mono"></pre>
+    <!-- PRINT ONLY THERMAL SLIP -->
+    <div id="print-receipt-section" class="hidden bg-white text-black font-mono p-4 w-full max-w-[58mm] sm:max-w-[80mm] mx-auto">
+      <pre id="print-receipt-text" class="whitespace-pre-wrap font-mono text-[11px] leading-relaxed select-text tracking-normal text-left"></pre>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Vanilla Javascript Logic Core -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // State variables
+        let savedScrollPos = 0;
+        let currentSlideIndex = 0;
+        let carouselAutoplayInterval = null;
+        let isCarouselPaused = false;
+
+        // Selectors
+        const preloader = document.getElementById("preloader");
+        const mainHeader = document.getElementById("main-header");
+        const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+        const mobileMenuDrawer = document.getElementById("mobile-menu-drawer");
+        const closeMobileMenuBtn = document.getElementById("close-mobile-menu-btn");
+        const assistModal = document.getElementById("assist-modal");
+        const locacaoModal = document.getElementById("locacao-modal");
+        const cpModal = document.getElementById("cp-modal");
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightbox-img");
+        const closeLightboxBtn = document.getElementById("close-lightbox-btn");
+
+        // Carousel Selectors
+        const slides = document.querySelectorAll(".carousel-slide");
+        const indicators = document.querySelectorAll(".carousel-indicator");
+        const prevSlideBtn = document.getElementById("prev-slide-btn");
+        const nextSlideBtn = document.getElementById("next-slide-btn");
+        const carouselContainer = document.getElementById("carousel-container");
+
+        // Form Selector
+        const assistForm = document.getElementById("assist-form");
+        const assistDescTextarea = document.getElementById("assist-descricao");
+
+        // 1. PRELOADER
+        setTimeout(() => {
+          if (preloader) {
+            preloader.classList.add("opacity-0", "scale-95");
+            preloader.addEventListener("transitionend", () => {
+              preloader.style.display = "none";
+            });
+          }
+        }, 2000);
+
+        // 2. HEADER SCROLL EFFECT & BACKGROUND MODIFIER
+        window.addEventListener("scroll", () => {
+          if (mainHeader) {
+            if (window.scrollY > 50) {
+              mainHeader.classList.add("bg-[#0A2342]", "shadow-xl");
+              mainHeader.classList.remove("bg-[#0A2342]/95");
+            } else {
+              mainHeader.classList.add("bg-[#0A2342]/95");
+              mainHeader.classList.remove("shadow-xl");
+            }
+          }
+        });
+
+        // Mobile Menu Toggles
+        if (mobileMenuBtn && mobileMenuDrawer) {
+          mobileMenuBtn.addEventListener("click", () => {
+            mobileMenuDrawer.classList.remove("translate-x-full");
+          });
+        }
+
+        const closeMobileMenu = () => {
+          if (mobileMenuDrawer) {
+            mobileMenuDrawer.classList.add("translate-x-full");
+          }
+        };
+
+        if (closeMobileMenuBtn) {
+          closeMobileMenuBtn.addEventListener("click", closeMobileMenu);
+        }
+
+        // Close mobile drawer on link selection
+        const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+        mobileNavLinks.forEach((link) => {
+          link.addEventListener("click", closeMobileMenu);
+        });
+
+        // 3. SCROLL REVEAL (FADE IN EFFECTS)
+        const revealElementsOnScroll = () => {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("visible");
+                }
+              });
+            },
+            { threshold: 0.1 }
+          );
+
+          const fadeElements = document.querySelectorAll(".fade-in-on-scroll");
+          fadeElements.forEach((el) => observer.observe(el));
+        };
+        revealElementsOnScroll();
+
+        // 4. INFINITE SLIDE CAROUSEL LOGIC
+        const showSlide = (index) => {
+          if (!slides.length) return;
+          
+          if (index >= slides.length) currentSlideIndex = 0;
+          else if (index < 0) currentSlideIndex = slides.length - 1;
+          else currentSlideIndex = index;
+
+          slides.forEach((slide, i) => {
+            if (i === currentSlideIndex) {
+              slide.classList.remove("opacity-0", "scale-95", "pointer-events-none");
+              slide.classList.add("opacity-100", "scale-100", "z-10");
+            } else {
+              slide.classList.add("opacity-0", "scale-95", "pointer-events-none");
+              slide.classList.remove("opacity-100", "scale-100", "z-10");
+            }
+          });
+
+          indicators.forEach((indicator, i) => {
+            if (i === currentSlideIndex) {
+              indicator.classList.add("w-8", "bg-[#FF7A00]");
+              indicator.classList.remove("w-2.5", "bg-slate-300");
+            } else {
+              indicator.classList.remove("w-8", "bg-[#FF7A00]");
+              indicator.classList.add("w-2.5", "bg-slate-300");
+            }
+          });
+        };
+
+        const startCarouselAutoplay = () => {
+          if (carouselAutoplayInterval) clearInterval(carouselAutoplayInterval);
+          carouselAutoplayInterval = setInterval(() => {
+            if (!isCarouselPaused) {
+              showSlide(currentSlideIndex + 1);
+            }
+          }, 5000);
+        };
+
+        if (slides.length > 0) {
+          showSlide(0);
+          startCarouselAutoplay();
+
+          if (prevSlideBtn) {
+            prevSlideBtn.addEventListener("click", () => {
+              showSlide(currentSlideIndex - 1);
+              startCarouselAutoplay();
+            });
+          }
+
+          if (nextSlideBtn) {
+            nextSlideBtn.addEventListener("click", () => {
+              showSlide(currentSlideIndex + 1);
+              startCarouselAutoplay();
+            });
+          }
+
+          indicators.forEach((indicator) => {
+            indicator.addEventListener("click", (e) => {
+              const targetIndex = parseInt(e.target.getAttribute("data-slide"), 10);
+              showSlide(targetIndex);
+              startCarouselAutoplay();
+            });
+          });
+
+          if (carouselContainer) {
+            carouselContainer.addEventListener("mouseenter", () => isCarouselPaused = true);
+            carouselContainer.addEventListener("mouseleave", () => isCarouselPaused = false);
+            carouselContainer.addEventListener("touchstart", () => isCarouselPaused = true);
+            carouselContainer.addEventListener("touchend", () => isCarouselPaused = false);
+          }
+        }
+
+        // 5. MODAL MANAGEMENT WITH POSITION RETENTION
+        const openModal = (modalElement) => {
+          savedScrollPos = window.scrollY;
+          if (modalElement) {
+            modalElement.classList.remove("hidden");
+            modalElement.classList.add("flex");
+            document.body.style.overflow = "hidden";
+          }
+        };
+
+        const closeModal = (modalElement) => {
+          if (modalElement) {
+            modalElement.classList.add("hidden");
+            modalElement.classList.remove("flex");
+            document.body.style.overflow = "";
+
+            setTimeout(() => {
+              window.scrollTo({
+                top: savedScrollPos,
+                behavior: "auto"
+              });
+            }, 50);
+          }
+        };
+
+        document.querySelectorAll(".open-assist-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            openModal(assistModal);
+          });
+        });
+
+        document.querySelectorAll(".open-locacao-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            openModal(locacaoModal);
+          });
+        });
+
+        document.querySelectorAll(".open-cp-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            openModal(cpModal);
+          });
+        });
+
+        document.querySelectorAll(".close-modal-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            closeModal(assistModal);
+            closeModal(locacaoModal);
+            closeModal(cpModal);
+          });
+        });
+
+        [assistModal, locacaoModal, cpModal].forEach((modal) => {
+          if (modal) {
+            modal.addEventListener("click", (e) => {
+              if (e.target === modal) {
+                closeModal(modal);
+              }
+            });
+          }
+        });
+
+        // 6. LIGHTBOX GALLERY
+        const openLightbox = (src) => {
+          if (lightbox && lightboxImg) {
+            lightboxImg.src = src;
+            lightbox.classList.remove("hidden");
+            lightbox.classList.add("flex");
+          }
+        };
+
+        const closeLightbox = () => {
+          if (lightbox) {
+            lightbox.classList.add("hidden");
+            lightbox.classList.remove("flex");
+          }
+        };
+
+        document.querySelectorAll(".lightbox-trigger").forEach((element) => {
+          element.addEventListener("click", (e) => {
+            const img = element.querySelector("img") || element;
+            if (img && img.src) {
+              openLightbox(img.src);
+            }
+          });
+        });
+
+        if (closeLightboxBtn) closeLightboxBtn.addEventListener("click", closeLightbox);
+        if (lightbox) {
+          lightbox.addEventListener("click", (e) => {
+            if (e.target === lightbox) closeLightbox();
+          });
+        }
+
+        // 7. AUTO-EXPAND TEXTAREA ON KEYPRESS
+        if (assistDescTextarea) {
+          assistDescTextarea.addEventListener("input", () => {
+            assistDescTextarea.style.height = "auto";
+            assistDescTextarea.style.height = `${assistDescTextarea.scrollHeight}px`;
+          });
+        }
+
+        // 8. WHATSAPP COMPILER & RECEIPT PRINT GENERATION
+        if (assistForm) {
+          const getFormattedMessage = (isWhatsapp = true) => {
+            const nome = document.getElementById("assist-nome").value || "Não informado";
+            const telefone = document.getElementById("assist-tel").value || "Não informado";
+            const equipamento = document.getElementById("assist-equipamento").value || "Não informado";
+            const descricao = assistDescTextarea.value || "Não informado";
+
+            const now = new Date();
+            const dataAtual = now.toLocaleDateString("pt-BR");
+            const horaAtual = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+            const formatListItem = (label, value, boldWrapper = "") => {
+              const prefix = `• ${boldWrapper}${label}:${boldWrapper} `;
+              const limit = 42;
+              
+              if ((prefix + value).length <= limit) {
+                return prefix + value;
+              }
+              
+              const words = value.split(" ");
+              let line1 = prefix;
+              let currentLine = "";
+              let i = 0;
+              
+              while (i < words.length && (line1 + currentLine + (currentLine ? " " : "") + words[i]).length <= limit) {
+                currentLine += (currentLine ? " " : "") + words[i];
+                i++;
+              }
+              line1 += currentLine;
+              
+              const lines = [line1];
+              currentLine = "";
+              const indent = "  ";
+              
+              while (i < words.length) {
+                const word = words[i];
+                if ((indent + currentLine + (currentLine ? " " : "") + word).length <= limit) {
+                  currentLine += (currentLine ? " " : "") + word;
+                } else {
+                  lines.push(indent + (currentLine || word));
+                  currentLine = currentLine ? word : "";
+                }
+                i++;
+              }
+              if (currentLine) {
+                lines.push(indent + currentLine);
+              }
+              return lines.join("\n");
+            };
+
+            const bold = isWhatsapp ? "*" : "";
+            const italic = isWhatsapp ? "_" : "";
+            const lineLength = 42;
+            const divider = "-".repeat(lineLength);
+
+            const header = `${bold}V&K ASSISTÊNCIA TÉCNICA${bold}`;
+            const dateLine = `${bold}Data de Envio:${bold} ${dataAtual}`;
+            const timeLine = `${bold}Hora de Envio:${bold} ${horaAtual}`;
+            const dadosTitle = `${bold}DADOS DO ORÇAMENTO:${bold}`;
+
+            const formattedCliente = formatListItem("Cliente", nome, bold);
+            const formattedWhatsApp = formatListItem("WhatsApp", telefone, bold);
+            const formattedEquip = formatListItem("Equipamento", equipamento, bold);
+            const formattedDefeito = formatListItem("Defeito Relatado", descricao, bold);
+
+            const footerText = "Nova triagem recebida via Quadro de Orçamento Inteligente.";
+            const wrappedFooter = [];
+            let currentLineText = "";
+            for (const word of footerText.split(" ")) {
+              if ((currentLineText + (currentLineText ? " " : "") + word).length <= lineLength) {
+                currentLineText += (currentLineText ? " " : "") + word;
+              } else {
+                wrappedFooter.push(currentLineText);
+                currentLineText = word;
+              }
+            }
+            if (currentLineText) {
+              wrappedFooter.push(currentLineText);
+            }
+            const footer = italic + wrappedFooter.join("\n" + italic) + italic;
+
+            return [
+              header,
+              divider,
+              dateLine,
+              timeLine,
+              divider,
+              dadosTitle,
+              "",
+              formattedCliente,
+              formattedWhatsApp,
+              formattedEquip,
+              formattedDefeito,
+              divider,
+              footer
+            ].join("\n");
+          };
+
+          assistForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const messageText = getFormattedMessage(true);
+            const whatsappUrl = `https://wa.me/5567998187301?text=${encodeURIComponent(messageText)}`;
+            window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+          });
+
+          const printBtn = document.getElementById("assist-print-btn");
+          if (printBtn) {
+            printBtn.addEventListener("click", (e) => {
+              e.preventDefault();
+              const printTextEl = document.getElementById("print-receipt-text");
+              if (printTextEl) {
+                printTextEl.textContent = getFormattedMessage(false);
+              }
+              window.print();
+            });
+          }
+        }
+
+        // 9. LOGO QUICK ACTION SCROLL TO TOP
+        const headerLogoLink = document.getElementById("header-logo");
+        if (headerLogoLink) {
+          headerLogoLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          });
+        }
+
+        // 10. BACK TO TOP SCROLL DETECTOR
+        const backToTopBtn = document.getElementById("back-to-top");
+        if (backToTopBtn) {
+          window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+              backToTopBtn.classList.remove("opacity-0", "pointer-events-none");
+              backToTopBtn.classList.add("opacity-100");
+            } else {
+              backToTopBtn.classList.add("opacity-0", "pointer-events-none");
+              backToTopBtn.classList.remove("opacity-100");
+            }
+          });
+
+          backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          });
+        }
+      });
+    </script>
   </body>
 </html>
